@@ -28,20 +28,8 @@ dist/
 Thumbs.db
 Desktop.ini
 
-# LaTeX-Zwischendateien (PDFs bleiben versionierbar)
-*.aux
-*.bbl
-*.bcf
-*.blg
-*.fdb_latexmk
-*.fls
-*.lof
-*.log
-*.lot
-*.nav
-*.out
-*.run.xml
-*.snm
-*.synctex.gz
-*.toc
-*.vrb
+# Lokaler Typst-Compiler und Installationsdownloads
+.tools/
+
+# Generierte PDFs werden in build/ geschrieben.
+# PDF-Abbildungen und Quellen an anderen Orten bleiben versionierbar.
