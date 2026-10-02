@@ -10,7 +10,10 @@
     },
     "tinymist.formatterMode": "typstyle",
     "tinymist.rootPath": "${workspaceFolder}",
+    "tinymist.fontPaths": ["${workspaceFolder}/fonts"],
+    "tinymist.typstExtraArgs": ["main.typ"],
     "tinymist.exportPdf": "never",
+    "tinymist.preview.refresh": "onSave",
     "terminal.integrated.env.windows": {
       "PATH": "${workspaceFolder}\\.tools\\typst;${env:PATH}"
     },
@@ -25,12 +28,13 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "Studienarbeit: PDF erstellen",
+        "label": "Thesis: Build PDF",
         "type": "process",
-        "command": "powershell.exe",
+        "command": "${workspaceFolder}/.tools/typst/typst.exe",
         "args": [
-          "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
-          "${workspaceFolder}/scripts/build.ps1"
+          "compile", "--root", "${workspaceFolder}",
+          "--font-path", "${workspaceFolder}/fonts",
+          "${workspaceFolder}/main.typ", "${workspaceFolder}/thesis.pdf"
         ],
         "options": { "cwd": "${workspaceFolder}" },
         "group": { "kind": "build", "isDefault": true },

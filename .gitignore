@@ -1,4 +1,112 @@
-# Python
+# ------------------------------------------------------------
+# Typst: erzeugte Dokumente und Build-Ausgaben
+# ------------------------------------------------------------
+# Gezielte Regeln: Literatur- und Abbildungs-PDFs bleiben versionierbar.
+/thesis.pdf
+/studienarbeit.pdf
+/main.pdf
+/layout.pdf
+**/main.pdf
+**/layout.pdf
+/main-*.png
+/main-*.svg
+/preview-*.png
+/preview-*.svg
+/build/
+/dist/
+/out/
+*.typst-cache
+.typst-cache/
+.tinymist/
+.typst/
+
+# Lokaler Compiler, Downloads, Analyse- und Prüfdateien
+/.tools/
+
+# ------------------------------------------------------------
+# Editor- und IDE-Konfiguration auf diesem Rechner
+# Die gemeinsame .code-workspace-Datei wird versioniert.
+# ------------------------------------------------------------
+/.vscode/
+/.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace.bak
+*.iml
+.history/
+.local-history/
+
+# Ungespeicherte Zwischenstände, Sicherungskopien und Sperrdateien
+*~
+*.bak
+*.backup
+*.orig
+*.rej
+*.tmp
+*.temp
+*.swp
+*.swo
+*.swn
+.#*
+\#*\#
+~$*
+*.lock.tmp
+
+# ------------------------------------------------------------
+# Betriebssystemdateien
+# ------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.AppleDouble/
+.LSOverride
+.Spotlight-V100/
+.Trashes/
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ------------------------------------------------------------
+# Lokale Konfiguration, Zugangsdaten und private Schlüssel
+# Beispiele dürfen versioniert werden; diese Datei entfernt
+# keine Dateien, die bereits in Git aufgenommen wurden.
+# ------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.sample
+*.local
+*.local.json
+*.local.toml
+*.local.yaml
+*.local.yml
+/secrets/
+/credentials/
+/.aws/
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# ------------------------------------------------------------
+# Lokale Logs, Caches und Editor-Datenbanken
+# ------------------------------------------------------------
+*.log
+/logs/
+/.cache/
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# ------------------------------------------------------------
+# Hilfswerkzeuge: Python/Jupyter, falls später lokal verwendet
+# Dafür werden keine Ordner oder Abhängigkeiten angelegt.
+# ------------------------------------------------------------
 __pycache__/
 *.py[cod]
 .venv/
@@ -7,29 +115,26 @@ env/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.ipynb_checkpoints/
 .coverage
+.coverage.*
 htmlcov/
 *.egg-info/
-build/
-dist/
 
-# Jupyter
-.ipynb_checkpoints/
+# LaTeX-Hilfsdateien bei lokalen Vergleichen oder Importen
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.nav
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
 
-# Lokale Konfiguration und Zugangsdaten
-.env
-.env.*
-!.env.example
-
-# Entwicklungsumgebungen und Betriebssysteme
-.idea/
-.vscode/
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# Lokaler Typst-Compiler und Installationsdownloads
-.tools/
-
-# Generierte PDFs werden in build/ geschrieben.
-# PDF-Abbildungen und Quellen an anderen Orten bleiben versionierbar.
+# Typst-Quellen, BibLaTeX-Dateien, Schriften, Abbildungen und
+# die gemeinsame Workspace-Konfiguration bleiben versionierbar.
