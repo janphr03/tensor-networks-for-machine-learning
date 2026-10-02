@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Lokale Konfiguration und Zugangsdaten
+.env
+.env.*
+!.env.example
+
+# Entwicklungsumgebungen und Betriebssysteme
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# LaTeX-Zwischendateien (PDFs bleiben versionierbar)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
