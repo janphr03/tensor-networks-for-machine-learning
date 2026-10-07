@@ -104,7 +104,8 @@
           #it.body() #h(1fr) #counter(page).display(at: it.element.location())
         ])))
     } else {
-      block(inset: (y: 3pt), it.indented(it.prefix(), it.inner()))
+      block(inset: (y: 3pt), link(it.element.location(),
+        it.indented(it.prefix(), it.inner())))
     }
   }
   body
@@ -158,11 +159,12 @@
       placeholder([No entries yet.])
     } else {
       show outline.entry: it => context {
-        block(inset: (y: 3pt), it.indented(
+        show link: set text(fill: black)
+        block(inset: (y: 3pt), link(it.element.location(), it.indented(
           counter(figure.where(kind: kind)).display(
             it.element.numbering, at: it.element.location()),
           it.inner(),
-        ))
+        )))
       }
       outline(title: none, target: figure.where(kind: kind), indent: auto)
     }
@@ -172,7 +174,9 @@
 #let appendix-list() = {
   unnumbered([List of Appendices])
   show outline.entry: it => context {
-    block(inset: (y: 3pt), it.indented(it.prefix(), it.inner()))
+    show link: set text(fill: black)
+    block(inset: (y: 3pt), link(it.element.location(),
+      it.indented(it.prefix(), it.inner())))
   }
   outline(title: none, target: heading.where(level: 1, numbering: "A.1"))
 }
