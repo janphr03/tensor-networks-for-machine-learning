@@ -1,4 +1,4 @@
-﻿#import "layout.typ": *
+#import "layout.typ": *
 
 // Edit your title and personal details here.
 #let data = (
@@ -57,7 +57,19 @@
 #pagebreak()
 #outline(title: [Table of Contents], depth: 3, indent: 1.5em)
 
-#figure-list(image, [List of Figures])
+#figure-list(image, [List of Figures], short-captions: (
+  "fig-ledger": [A tensor as an indexed ledger],
+  "fig-outer": [The outer product as a loom],
+  "fig-unfolding": [Unfolding the ledger],
+  "fig-contraction": [Contraction as matching lanes],
+  "fig-svd": [SVD as layers of a pattern],
+  "fig-relay": [Latent choices across a tensor train],
+  "fig-topologies": [Tensor decomposition families and network topologies],
+  "fig-order": [Contraction order as packing early],
+  "fig-gauge": [Gauge freedom as a coordinate translation],
+  "fig-interaction": [Interactions as a bending sheet],
+  "fig-learning": [A tensor model learns a curve],
+))
 #figure-list(table, [List of Tables])
 #appendix-list()
 
@@ -77,448 +89,408 @@
 
 = Introduction <introduction>
 #placeholder[
-  Introduce the forecasting problem and the research group's interest in a
-  reusable comparison between tensor-network methods and current strong
-  forecasting models. State the scope of the study and explain why prediction
-  quality and computational efficiency both matter.
+  Introduce the time-series forecasting task and the research group's need for
+  a reproducible classical and quantum-inspired reference for developing quantum
+  algorithms. Make out-of-sample prediction accuracy the primary objective.
+  Treat parameter count, runtime, and memory as secondary descriptive criteria.
 ]
 
 == Motivation <motivation>
 #placeholder[
-  Describe the scientific context of the professor's datasets and quantum
-  algorithms. Explain why assessing classical and quantum-inspired forecasting
-  methods can provide a useful reference for the research group. Connect this
-  motivation to the practical costs of training and using forecasting models.
+  Explain why reliable forecasts matter for the research group's application.
+  The research data are supplied by DATEV; the actual variables,
+  sampling frequency, and prediction target are still unknown. Accounting or
+  business forecasting is a possible context, while stock-market forecasting
+  must not be assumed. Use #cite(<hyndman2021>) for forecasting context.
+  #cite(<datevRewe>) describes DATEV's public accounting-data services, not the
+  actual research dataset. Add quantum-inspired financial applications only
+  when they help explain the confirmed task.
 ]
 
 == Problem Statement
 #placeholder[
-  State which time-series prediction problem the study will investigate and
-  which aspects of the data are already known. Explain the unresolved question:
-  whether suitable tensor-network models offer advantages over relevant
-  state-of-the-art competitors on these particular data. Identify any task or
-  dataset details that still need to be agreed with the research group.
+  State the forecasting problem once the target variables, data, and horizons
+  are known. Ask whether suitable tensor-network or hybrid models achieve
+  lower held-out prediction error than strong established methods under a
+  comparable evaluation protocol. Separate regression, directional
+  classification, and portfolio evaluation when reviewing financial studies.
 ]
 
 == Objectives and Research Questions
 #placeholder[
-  Formulate research questions about forecast quality, parameter count,
-  training and inference costs, and memory use. Ask under which data properties,
-  horizons, or resource constraints the approaches work well or poorly.
-  Define the intended deliverables: a justified model selection, reproducible
-  experiments, and implementations and results the research group can reuse.
+  Primary question: Do tensor-network or hybrid models improve forecasting
+  accuracy on the research datasets compared with relevant established models?
+  Supporting questions: Which horizons and data conditions favor each method?
+  Does the tensor component contribute beyond its conventional counterpart?
+  Secondary question: What parameter count and resource use accompany the
+  measured accuracy? Deliver reproducible implementations and evaluation
+  material that the research group can reuse for its quantum algorithms.
 ]
 
 == Structure of the Thesis
 #placeholder[
-  Briefly explain the progression from the foundations and literature review
-  in @background to the experimental design in @methodology, the results and
-  interpretation in @results, and the answers and future directions in
-  @conclusion. Show how each chapter contributes to the research questions.
+  Explain the progression in @background: time series and forecasting,
+  established methods, motivation for tensor-based models, tensor foundations,
+  tensor networks, and their use in prediction. The literature review then
+  motivates the experimental choices in @methodology. Present accuracy first
+  in @results and answer the research questions in @conclusion.
 ]
 
 = Theoretical Background <background>
 #placeholder[
-  Introduce the concepts needed to understand the forecasting task, the candidate
-  models, and their evaluation. Explain how the mathematical foundations lead to
-  tensor networks and their use in machine learning.
+  Start with the forecasting problem, explain established solutions, and then
+  motivate the tensor-based approach. Introduce mathematics where it becomes
+  necessary. Develop possible advantages as hypotheses whose validity must
+  be assessed empirically.
 ]
 
-// Initial learning and writing scaffold; the final depth depends on the data and models.
-// Planning target: about 25–30 pages within the 80–100-page study.
-// German learning questions and reading suggestions: notes/chapter-2-learning-guide.md.
-
-== Mathematical Foundations <mathematical-foundations>
-#placeholder[
-  Establish the notation and mathematical ideas used throughout the study.
-  Focus on the tools needed to explain tensor factorizations, learned prediction
-  functions, and forecast errors.
-]
-
-=== Linear Algebra and Notation
-#placeholder[
-  Establish notation for scalars, vectors, matrices, indices, dimensions, inner
-  products, and norms. Use a small matrix example to explain shapes and matrix
-  multiplication. Starting reference: #cite(<goodfellow2016>).
-]
-
-=== Rank, Singular Value Decomposition, and Low-Rank Approximation
-#placeholder[
-  Explain matrix rank, singular values, the singular value decomposition (SVD),
-  and truncated approximation. Discuss the relationship between approximation
-  error and retained rank. Work through a small example that can later be reused
-  to introduce tensor decompositions. Starting reference: #cite(<oseledets2011>).
-]
-
-=== Probability and Statistics
-#placeholder[
-  Introduce random variables, expectation, variance, covariance, and conditional
-  prediction. Distinguish point predictions from predictive distributions.
-  Keep advanced probability theory conditional on the models actually used.
-  Starting reference: #cite(<goodfellow2016>).
-]
-
-== Tensors and Multilinear Operations <tensor-foundations>
-#placeholder[
-  Develop the tensor concepts step by step before introducing entire networks.
-  Connect the abstract notation to concrete data arrays and small numerical
-  examples so that later model descriptions can build on a common vocabulary.
-]
-
-=== Tensor Order, Modes, and Data Representation
-#placeholder[
-  Introduce tensors as multidimensional arrays in the numerical setting used
-  here. Distinguish order, shape, mode size, and rank. Illustrate a forecasting
-  input with sample, time, and variable axes; its three axes alone do not make
-  the forecasting model a tensor network. Starting reference: #cite(<kolda2009>).
-]
-
-=== Tensor Products, Unfolding, and Contraction
-#placeholder[
-  Explain outer products, reshaping, mode unfolding, and contraction over shared
-  indices. Relate a contraction to matrix multiplication, and show one small
-  indexed example together with its tensor diagram. Starting references:
-  #cite(<kolda2009>) and #cite(<bridgeman2017>).
-]
-
-=== Tensor Rank and Classical Decompositions
-#placeholder[
-  Introduce rank-one tensors, CP decomposition, and Tucker decomposition as
-  mathematical context. Distinguish CP rank and multilinear rank from matrix
-  rank and later tensor-train ranks. Start with their representations and
-  parameter counts; expand algorithms and proofs only if they become relevant.
-  Starting reference: #cite(<kolda2009>).
-]
+// Sections 2.4–2.6 are drafted with original numerical examples and vector figures.
+// Adjust the other learning scaffolds once the datasets and models are selected.
+// Planning target: about 28–35 pages within the 80–100-page study.
+// Reading map: notes/chapter-2-learning-guide.md.
+// Dated model evidence: notes/tensor-model-literature-review.md.
 
 == Time-Series Forecasting <time-series-foundations>
 #placeholder[
-  Define what is being predicted, from which information, and over which future
-  horizon. Explain the temporal characteristics that can make the research
-  datasets easier or harder to forecast.
+  Define the application and forecasting task before introducing model
+  architectures. Establish what the data represent and what information is
+  available when a prediction is made.
 ]
 
-=== Forecasting Task and Information Available at Prediction Time
+=== Time Series and Motivation for Forecasting
 #placeholder[
-  Define univariate and multivariate series, look-back length, forecast horizon,
-  target variables, and covariates. Formulate forecasting as a mapping from an
-  observed history to future targets. Distinguish past-only inputs from
-  covariates genuinely known in advance, and explain one-step versus multi-step
-  prediction. Starting reference: #cite(<hyndman2021>).
+  Define a time series, its time index, sampling frequency, and univariate or
+  multivariate form. Give an illustrative example and explain the practical
+  purpose of forecasting. Replace the example with the professor's actual data
+  once available. Financial prices, returns, or volatility require different
+  targets and must be distinguished if finance becomes the application.
+  Starting reference: #cite(<hyndman2021>).
 ]
 
 === Temporal Structure and Predictability
 #placeholder[
-  Explain trends, seasonality, noise, autocorrelation, cross-variable dependence,
-  stationarity, and distribution changes. Relate these properties to what a
-  forecasting model needs to learn. Treat nonlinear dynamics and chaotic
-  predictability limits in more depth if the research datasets require them.
-  Starting reference: #cite(<hyndman2021>).
+  Explain trend, seasonality, noise, autocorrelation, stationarity, and changing
+  data distributions. Relate temporal and cross-variable dependencies to what a
+  forecasting model might learn. Introduce chaotic dynamics only if the actual
+  datasets justify it. Starting reference:
+  #cite(<hyndman2021>, supplement: [Secs. 2.3, 2.8, and 9.1]).
 ]
 
-=== Windowing and Preprocessing
+=== Forecasting Tasks, Windows, and Available Information
 #placeholder[
-  Explain how sliding windows turn a time series into supervised examples.
-  Discuss scaling, missing values, resampling, and the role of variable order
-  when constructing tensor representations. Introduce the principle that
-  preprocessing must respect the information available at the forecast origin;
-  specify the actual dataset pipeline in the methodology chapter.
+  Define targets, input windows, forecast horizons, covariates, and direct or
+  recursive multi-step prediction. Illustrate chronological data partitions
+  and explain why preprocessing must use only information available at the
+  forecast origin. Specify the actual pipeline later in @methodology.
+  Starting reference: #cite(<hyndman2021>, supplement: [Secs. 5.8 and 5.10]).
 ]
 
-== Machine Learning for Forecasting <forecasting-ml-foundations>
+== Established Forecasting Methods <forecasting-ml-foundations>
 #placeholder[
-  Explain how forecasting models learn from data and introduce the architectural
-  ideas needed to understand the current competitors. Adjust the depth of each
-  model family once the literature review and dataset analysis guide selection.
+  Explain the relevant statistical, classical machine-learning, and neural
+  forecasting approaches. Develop the models used in the experiment in depth;
+  keep the other families as orientation.
 ]
 
-=== Learning Objectives, Optimization, and Generalization
+=== Simple and Statistical Baselines
 #placeholder[
-  Introduce supervised regression, model parameters, hyperparameters, loss
-  functions, gradient-based optimization, regularization, and early stopping.
-  Explain overfitting and the distinction between a training loss and a held-out
-  forecast error. Starting reference: #cite(<goodfellow2016>).
+  Introduce naive and seasonal-naive forecasts and explain the rationale for
+  using them as reference points. Outline autoregression and ARIMA; add ETS or
+  vector autoregression if the selected data warrant them. If forecasting
+  financial price levels, include the last-observation or random-walk baseline.
+  Starting reference: #cite(<hyndman2021>, supplement: [Sec. 5.2 and Ch. 9]).
 ]
 
-=== Forecasting Architecture Families
+=== Supervised Learning, Optimization, and Generalization
 #placeholder[
-  Explain the modeling ideas behind linear or MLP-based forecasters, recurrent
-  models, temporal convolutions, and attention-based models. Introduce temporal
-  patches and ways of modeling cross-variable interactions. Use this overview
-  to understand current methods, and later develop the chosen competitors in
-  greater depth. Starting references: #cite(<vaswani2017>) and #cite(<nie2023>).
+  Introduce regression, model parameters, hyperparameters, training losses,
+  optimization, regularization, and early stopping. Explain the difference
+  between fitting training data and predicting unseen future observations.
+  Establish basic vector and probability notation as needed.
+  Starting references: #cite(<james2023>, supplement: [Ch. 2]) and
+  #cite(<goodfellow2016>, supplement: [Chs. 5, 7, and 8]).
+]
+
+=== Classical Machine Learning with Lagged Features
+#placeholder[
+  Explain how lagged observations and known covariates turn forecasting into a
+  supervised prediction task. Introduce linear or ridge regression and
+  tree-based methods such as gradient boosting. Add support vector regression
+  only if it is selected. Explain how these methods receive temporal
+  information through the feature representation.
+  Starting references: #cite(<james2023>, supplement: [Chs. 3, 6, and 8]) and
+  #cite(<chen2016>).
+]
+
+=== Neural Forecasting Architectures
+#placeholder[
+  Explain linear and MLP-based forecasters, RNNs and LSTMs, temporal
+  convolutions, and attention. Connect each architecture to input windows and
+  forecast outputs. Use DLinear, N-BEATS, PatchTST, and iTransformer as reading
+  examples, not as a fixed current ranking. Explain only the architectural
+  mechanisms that are relevant to the eventual comparison.
+  Starting references: #cite(<goodfellow2016>, supplement: [Chs. 6, 9, and 10]),
+  #cite(<bai2018>), #cite(<vaswani2017>), #cite(<zeng2023>),
+  #cite(<oreshkin2020>), #cite(<nie2023>), and #cite(<liu2024>).
 ]
 
 === Pretraining and Time-Series Foundation Models
 #placeholder[
-  Explain dataset-specific training, pretraining, zero-shot use, and fine-tuning.
-  Discuss which inputs a pretrained forecaster supports and how external
-  training data affects the interpretation of a comparison. Include this branch
-  if such models are relevant to the datasets and experimental resources.
-  Reading example: #cite(<ansari2025>); update the candidate set during the literature
-  review rather than treating this example as a final model choice.
+  Explain dataset-specific training, zero-shot forecasting, and fine-tuning.
+  Consider a suitable pretrained forecaster as an additional accuracy-oriented
+  competitor, documenting its external training data and supported inputs.
+  Chronos-2 is a starting example; refresh the candidate list when the datasets
+  and experiments are fixed. Starting reference: #cite(<ansari2025>).
 ]
 
-== Tensor Networks <tensor-network-foundations>
+== Motivation for Tensor-Based Forecasting <tensor-motivation>
 #placeholder[
-  Explain how tensor factorizations become networks of smaller cores. Develop
-  their notation, representative topologies, approximation mechanisms, and
-  computational properties as the basis for understanding the candidate models.
+  Connect the requirements of forecasting to the tensor-based approach before
+  introducing its formal mathematics. Distinguish tensors as data objects from
+  tensor decompositions and tensor-network prediction models.
 ]
 
-=== Network Representation and Graphical Notation
+=== Modeling Higher-Order and Cross-Variable Dependencies
 #placeholder[
-  Explain tensor cores, open and contracted indices, network topology, and bond
-  dimensions. Connect diagrams to indexed expressions. Explain how a
-  factorization can represent a high-order tensor using smaller cores, and
-  which structural assumptions make this useful. Starting reference:
-  #cite(<bridgeman2017>).
+  Explain why interactions among past states or several variables may matter,
+  and how explicit multiplicative interactions provide one possible modeling
+  choice. Motivate tensor representations using higher-order recurrent models.
+  Ordinary neural networks also use tensors; the proposed contribution must
+  identify the specific factorization or network structure.
+  Starting reference: #cite(<yu2019>).
 ]
 
-=== Matrix Product States and Tensor Trains
+=== Structured Representations and Accuracy Hypotheses
 #placeholder[
-  Use the chain representation as an introductory example. Explain the
-  relationship between matrix product states (MPS) and tensor trains (TT),
-  boundary ranks, and the role of internal ranks or bond dimensions. Compare
-  the parameter count of a small factorization with its dense representation.
-  This introductory example leaves the final forecasting architecture open.
-  Starting reference: #cite(<oseledets2011>).
+  Motivate low-rank structure as a way to constrain the learned representation
+  and potentially improve generalization. Introduce modeling interactions,
+  regularization, and compact representations as related motivations.
+  Compression alone does not establish improved forecasting accuracy. State
+  testable hypotheses and expected failure cases rather than assuming that
+  tensor-based models are superior.
+  Starting references: #cite(<novikov2015>), #cite(<yu2019>), and
+  #cite(<shi2020>).
 ]
 
-=== Operators, Trees, and Other Candidate Topologies
+#include "chapters/tensor-mathematical-foundations.typ"
+
+#include "chapters/tensor-network-principles.typ"
+
+#include "chapters/tensor-learning-models.typ"
+
+== Evaluating Forecasting Accuracy <evaluation-foundations>
 #placeholder[
-  Introduce matrix product operators (MPO) for factorized linear maps and tree
-  tensor networks (TTN) for hierarchical structure. Relate topology to how
-  dependencies are represented. Give other topologies a brief orientation;
-  expand only those supported by the literature and relevant to the selected
-  forecasting models. Starting reference: #cite(<bridgeman2017>).
+  Make held-out forecast quality the main basis for model selection and
+  comparison. Explain secondary resource metrics after the accuracy protocol.
 ]
 
-=== Approximation, Contraction, and Computational Cost
+=== Prediction Errors and Task-Specific Metrics
 #placeholder[
-  Explain the idea of sequential SVD and rank truncation, and how approximation
-  quality depends on the retained ranks. Discuss contraction order, temporary
-  tensors, and scaling with mode sizes and bond dimensions. Distinguish a
-  smaller parameter count from demonstrated runtime or memory savings.
-  Introduce canonical forms or gauge freedom if required by a chosen training
-  algorithm. Starting references: #cite(<oseledets2011>) and #cite(<bridgeman2017>).
+  Define MAE, RMSE or MSE, and scaled metrics such as MASE when appropriate.
+  Explain horizon-wise and cross-variable aggregation, original versus
+  normalized units, and percentage-error issues near zero. If the target is
+  financial direction, define classification metrics separately; portfolio
+  returns or Sharpe ratios are additional application outcomes.
+  Starting reference: #cite(<hyndman2021>, supplement: [Sec. 5.8]).
 ]
 
-== Tensor-Network-Based Machine Learning <tensor-network-ml>
+=== Temporal Validation and Reliable Comparisons
 #placeholder[
-  Connect tensor-network representations to trainable machine-learning models.
-  Show where inputs enter the model, how a forecast is produced, and what
-  properties of the representation influence learning and generalization.
+  Explain chronological train-validation-test partitions, rolling-origin
+  evaluation, leakage prevention, comparable input information, and tuning
+  budgets. Report variability across repeated runs and forecast origins,
+  accounting for temporal dependence if uncertainty intervals are used.
+  Starting references: #cite(<hyndman2021>, supplement: [Sec. 5.10]) and
+  #cite(<qiu2024>).
 ]
 
-=== Feature Representations and Prediction Functions
+=== Secondary Parameter and Resource Measurements
 #placeholder[
-  Explain how input features and tensor-network parameters combine into a
-  prediction function. Contrast a tensor network over a feature map with a
-  network used inside a neural architecture. Work through a small prediction
-  example and explain what must change when moving from classification to
-  time-series regression. Starting reference: #cite(<stoudenmire2016>).
+  Define parameter count, training time, inference time, and peak memory.
+  Report these alongside accuracy to describe practical feasibility. State
+  hardware, batch size, precision, and the costs included for pretrained
+  models. Keep a separate parameter-matched ablation where it helps identify
+  the tensor component's effect; use accuracy-oriented tuning for the main
+  model comparison.
 ]
 
-=== Tensorized Layers and Hybrid Architectures
+== Related Work and Evidence for Model Selection <related-work>
 #placeholder[
-  Explain how a weight matrix can be reshaped and factorized into tensor cores.
-  Describe the distinction between factorizing a trained layer and training a
-  factorized layer directly. Relate compression, expressive capacity, and
-  possible hybrid recurrent or attention-based designs. Starting reference:
-  #cite(<novikov2015>).
+  Review original papers and their exact benchmark scope. Separate evidence of
+  lower numeric forecast error, improved direction classification, comparable
+  accuracy, and resource savings. Record paper versions and the date of review.
+  Initial evidence review: 7 October 2026.
 ]
 
-=== Training and Inductive Bias
+=== Tensor and Hybrid Models with Forecasting Evidence
 #placeholder[
-  Explain automatic differentiation through contractions and, where relevant,
-  local or alternating optimization. Discuss how topology, feature maps,
-  tensorization, and bond dimension affect the model's inductive bias. Identify
-  numerical or optimization issues that later need empirical investigation.
-  Starting references: #cite(<stoudenmire2016>) and #cite(<novikov2015>).
+  Review HOT-LSTM, BHT-ARIMA, LSTM-MERA, and the MPO/Volterra approach. Record
+  datasets, targets, horizons, baselines, metric definitions, splits, and code.
+  The 2026 revision of #cite(<martinez2026>) reports comparable optimized
+  median forecasting performance to ESNs; do not infer an unconditional
+  accuracy win from older abstract wording.
+  Starting references: #cite(<yu2019>), #cite(<shi2020>), and #cite(<meng2021>).
+  #cite(<you2025>) is an additional chaotic-dynamics lead, with a narrower
+  comparison scope than a current forecasting benchmark.
 ]
 
-=== Quantum-Inspired Context
+=== Business and Financial Applications and Transferability
 #placeholder[
-  Briefly explain the quantum many-body origin of the tensor-network language
-  and its use in classical computation. Add Schmidt decomposition, entanglement,
-  or Born-rule models only when they help explain a selected method. Connect
-  this context to the research group's quantum algorithms and define the
-  computational setting of each approach. Starting reference: #cite(<bridgeman2017>).
+  Assess BHT-ARIMA's evidence on sales and raw-materials series against the
+  actual DATEV task if it concerns related business series. Treat market-data
+  studies as additional context unless the dataset confirms that application.
+  Distinguish
+  #cite(<xu2021>) on next-day currency direction classification from
+  #cite(<kobayashi2023>) on cross-sectional stock-return predictions evaluated
+  through portfolio backtesting. Inspect regression evidence such as
+  #cite(<dacosta2021>) without assuming a tensor accuracy advantage.
+  Verify data availability and task compatibility before selecting a model.
 ]
 
-== Evaluation and Computational Efficiency <evaluation-foundations>
+=== Strong Established Forecasting Competitors
 #placeholder[
-  Establish what constitutes a meaningful comparison of forecasting methods.
-  Define prediction and resource metrics, explain their limitations, and outline
-  the principles that make the later experiments fair and reproducible.
+  Review statistical and lag-feature ML methods alongside DLinear, N-BEATS,
+  PatchTST, iTransformer, and a suitable pretrained model. Use the actual
+  datasets, horizons, and validated implementations to select the competitors.
+  These examples form an initial candidate set, not a claim to a complete
+  October 2026 SOTA ranking.
+  Starting references: #cite(<qiu2024>), #cite(<zeng2023>), #cite(<oreshkin2020>),
+  #cite(<nie2023>), #cite(<liu2024>), and #cite(<ansari2025>).
 ]
 
-=== Forecast Quality and Uncertainty
+=== Synthesis, Research Gap, and Selection Criteria
 #placeholder[
-  Define candidate point-forecast metrics such as MAE, MSE or RMSE, and scaled
-  errors such as MASE. Explain their units, assumptions, and aggregation across
-  horizons and variables. Discuss percentage-error limitations near zero.
-  Add quantile losses, interval coverage, or CRPS if probabilistic forecasts
-  are part of the experiment. Starting reference: #cite(<hyndman2021>).
-]
-
-=== Resource Use and Efficiency Tradeoffs
-#placeholder[
-  Define parameter count, training time, inference latency or throughput,
-  peak memory, and a suitable measure of arithmetic cost. Discuss the effects
-  of hardware, batch size, precision, and optimizer or activation memory.
-  Introduce accuracy–resource tradeoffs and Pareto comparisons. For pretrained
-  models, distinguish adaptation costs from the cost of creating the pretrained
-  model. Put concrete measurement procedures in the methodology chapter.
-]
-
-=== Fair and Reproducible Comparisons
-#placeholder[
-  Explain chronological training, validation, and test partitions, rolling-origin
-  evaluation, and leakage prevention. Discuss consistent target horizons and
-  input information, transparent tuning budgets, repeated runs, and variability
-  across datasets. Relate reproducibility to the research group's reuse of code
-  and results. Starting reference: #cite(<hyndman2021>).
-]
-
-== Related Work and State of the Art <related-work>
-#placeholder[
-  Position the study within the current forecasting literature on both model
-  classes. Compare evidence relevant to the research datasets and derive the
-  gap that the experiments will address. Keep the search and candidate set
-  current when the final methods are chosen.
-]
-
-=== Tensor Networks for Time-Series Forecasting
-#placeholder[
-  Review recent forecasting-specific tensor-network methods using their original
-  papers and available implementations. Record the architecture, input
-  representation, datasets, horizons, training method, results, and reported
-  resource use. A reading lead for nonlinear or chaotic data is #cite(<you2025>);
-  assess its scope and publication status before using it as evidence for the
-  research datasets. Extend and update this initial reading list.
-]
-
-=== Current Non-Tensor-Network Forecasting Methods
-#placeholder[
-  Review strong contemporary competitors for the actual task, including
-  dataset-trained and pretrained approaches where appropriate. Use the same
-  comparison dimensions as for tensor-network methods. Patch-based forecasting
-  (#cite(<nie2023>)) and a pretrained multivariate forecaster (#cite(<ansari2025>)) illustrate
-  different design choices; establish the current candidate set through a
-  dated literature review and relevant benchmark evidence.
-]
-
-=== Synthesis and Criteria for Model Selection
-#placeholder[
-  Build a literature comparison table and identify what existing evaluations
-  leave unresolved for the professor's datasets. Derive selection criteria from
-  task suitability, relevant performance evidence, computational demands, and
-  reproducible implementations. End with the research gap and a transition to
-  the concrete dataset and model choices in the methodology chapter.
+  Build an evidence table separating each reported advantage from its
+  limitations. Prioritize task compatibility, held-out accuracy evidence,
+  strong baselines, and reproducibility. The study will test whether published
+  advantages transfer to the research group's datasets and remain when stronger
+  competitors and an identical protocol are used. Make the concrete model
+  choices in @methodology.
 ]
 
 = Methodology <methodology>
 #placeholder[
-  Explain how the research questions are translated into reproducible
-  experiments. Describe the actual datasets, justified model choices, training
-  procedures, and evaluation protocol. Make the decisions specific enough for
-  the research group to repeat and extend the comparison.
+  Translate the accuracy-first research questions into reproducible
+  experiments. Document the actual data, model choices, training, and
+  evaluation decisions.
 ]
 
-== Research Approach
+== Research Design and Model Selection
 #placeholder[
-  Describe the empirical comparison and the sequence from dataset analysis and
-  literature review to model selection, implementation, and evaluation.
-  Justify which datasets, forecasting tasks, and current methods are included.
-  State how accuracy and efficiency will be considered together and which
-  questions any planned ablations or sensitivity analyses are meant to answer.
+  Describe dataset analysis, the dated literature review, and the resulting
+  model selection. Choose at least one tensor or hybrid method, its relevant
+  conventional counterpart, a simple baseline, and strong task-appropriate
+  competitors. Model selection depends on validation accuracy and available
+  training resources; the final test set remains reserved for evaluation.
+  Protocol reference: #cite(<qiu2024>).
 ]
 
-== Experimental Setup
+== Datasets, Forecasting Tasks, and Preprocessing
 #placeholder[
-  Document the concrete choices behind every experiment. Explain the data,
-  models, training configurations, computing environment, and measurement
-  procedures, and distinguish predefined protocol choices from adjustments
-  made using validation results.
+  Describe the data source, target variables, sampling, sequence lengths,
+  input windows, horizons, and covariates. Specify chronological partitions
+  and preprocessing fitted on training data. Prevent future information from
+  entering scaling, imputation, feature extraction, or tensor decomposition.
+  State DATEV as the known data source and identify the unit represented by
+  each series from the actual metadata. Clarify how business events, reporting
+  periods, and information availability form the time index if applicable.
+  Determine whether the target is an amount, count, ratio, or class. If the
+  data are market series, specify prices, returns, direction, or volatility.
+  Starting reference: #cite(<hyndman2021>, supplement: [Sec. 5.10]).
 ]
 
-=== Datasets, Forecasting Tasks, and Preprocessing
+== Models, Implementation, and Accuracy-Oriented Training
 #placeholder[
-  Describe the data source, variables, sampling, series lengths, and relevant
-  temporal properties. Specify targets, input windows, horizons, covariates,
-  chronological partitions, and preprocessing fitted on training data.
-  Explain how windows and forecast origins respect partition boundaries and
-  the information available when each prediction is made.
+  Identify original implementations, versions, and adaptations. Document
+  tensor representations, ranks, loss functions, optimizers, early stopping,
+  random seeds, tuning budgets, and pretrained weights. Select configurations
+  by a predefined validation metric appropriate to the target. Give every
+  model a defensible tuning opportunity within the stated resource budget.
 ]
 
-=== Models, Implementation, and Training
+== Evaluation Protocol and Reproducibility
 #placeholder[
-  Identify the selected model versions and original implementations. Describe
-  adaptations to the data, tensor representations and ranks where applicable,
-  loss functions, optimizers, stopping criteria, random seeds, and tuning
-  budgets. Document pretrained weights and fine-tuning where relevant, and
-  justify any differences in the information or resources available to models.
+  Predefine the primary accuracy metric, complementary metrics, horizon and
+  variable aggregation, rolling forecast origins, and repeated runs.
+  Explain the uncertainty summaries and retain all experiment configurations,
+  split definitions, and outputs. Include simple-reference skill comparisons
+  and report variability as well as means.
+  Starting references: #cite(<hyndman2021>, supplement: [Secs. 5.8 and 5.10])
+  and #cite(<qiu2024>).
 ]
 
-=== Evaluation Protocol and Reproducibility
+== Ablations and Secondary Resource Measurements
 #placeholder[
-  Specify forecast metrics, aggregation, evaluation origins, repeated runs,
-  and any uncertainty summaries. Define how training time, inference cost,
-  parameter count, peak memory, and arithmetic cost are measured on the stated
-  hardware and software. Document warm-up and batch settings where relevant,
-  and explain how configurations and outputs are retained for reuse.
+  Compare the selected hybrid with its conventional counterpart and examine
+  tensor rank or representation choices. Define parameter-matched ablations
+  separately from the main accuracy-oriented competition. Measure parameter
+  count, training and inference time, and peak memory under documented hardware
+  and batch settings. Use these measurements to interpret feasibility after
+  the main forecasting result.
 ]
 
 = Results and Discussion <results>
 #placeholder[
-  Present the experimental evidence and interpret it in relation to the research
-  questions. Organize the findings so that readers can judge forecast quality,
-  resource requirements, and the reliability of any claimed advantages.
+  Present the actual empirical evidence, beginning with forecast accuracy.
+  Interpret practical requirements and transferability after establishing
+  the prediction results.
 ]
 
-== Results
+== Forecasting Accuracy
 #placeholder[
-  Report prediction errors and resource metrics for each relevant dataset and
-  horizon using consistent tables and figures. Include variability across
-  repeated runs, representative forecast examples, and any planned ablations.
-  Show the accuracy–efficiency tradeoffs and identify which observations are
-  supported by the measured results.
+  Report the primary metric by dataset and horizon, followed by complementary
+  errors, variability, baseline comparisons, and representative forecasts.
+  Distinguish a measured difference from a statistically supported or
+  practically meaningful advantage. Keep regression and directional
+  classification results in separate comparisons.
+]
+
+== Contribution of the Tensor Component
+#placeholder[
+  Present the conventional-versus-hybrid ablations and tensor-rank sensitivity.
+  Explain whether any accuracy improvement persists across runs and horizons.
+  Use these results to assess whether the tensor component contributes beyond
+  architecture size, preprocessing, or additional tuning.
+]
+
+== Parameter Count and Computational Requirements
+#placeholder[
+  Present parameter count, training time, inference time, and memory as secondary
+  results. Explain what resources accompany the best forecasts and whether the
+  models fit the research group's practical constraints.
 ]
 
 == Discussion and Limitations
 #placeholder[
-  Explain under which conditions the tensor-network approaches are useful and
-  where they fall short. Relate observed behavior to data properties, model
-  structure, ranks, optimization, and computational implementation, while
-  distinguishing tested explanations from hypotheses. Discuss limits caused
-  by the available datasets, tuning budget, hardware, and pretrained models,
-  and assess how broadly the research group can reuse the findings.
+  Relate findings to the research questions and published evidence. Discuss
+  data properties, model structure, ranks, optimization, and evaluation scope,
+  separating tested explanations from hypotheses. State which conclusions
+  transfer to the group's quantum-algorithm work and which require additional
+  experiments. An accuracy gain is an outcome to establish, not a prerequisite
+  for a scientifically useful comparison.
 ]
 
 = Conclusion and Outlook <conclusion>
 #placeholder[
-  Bring the answers to the research questions together and explain what the
-  study contributes to the research group's forecasting work. Draw conclusions
-  at the level justified by the experiments and derive concrete next steps.
+  Answer the accuracy-first research question using the study's own results.
+  Explain the contribution of the reproducible comparison to the research
+  group's work.
 ]
 
-== Summary
+== Answers to the Research Questions
 #placeholder[
-  Summarize the investigated tasks, selected methods, and main findings.
-  Answer whether tensor-network models provide accuracy or efficiency benefits
-  on the studied data and specify the conditions and limitations of those
-  answers. Identify the implementations and evaluation material delivered for
-  the research group's use.
+  Summarize whether tensor or hybrid models improve prediction accuracy for
+  the studied tasks and specify the supported conditions and limitations.
+  Discuss parameter and resource findings second. Identify the implementations,
+  evaluation protocol, and results delivered as a reusable reference.
 ]
 
 == Future Work
 #placeholder[
-  Derive further experiments or model improvements from the observed limitations
-  and unresolved questions. Possible directions include additional datasets or
-  horizons, alternative tensor representations, better training or contraction
-  strategies, and extensions of the comparison to the group's quantum
-  algorithms. Prioritize the directions that the study's evidence supports.
+  Derive follow-up experiments from observed limitations: additional data,
+  horizons, representations, hybrid architectures, or quantum algorithms.
+  Prioritize directions supported by the results. Clarify that new quantum
+  implementations would need their own accuracy and resource evaluation.
 ]
 
 #sources("references.bib")

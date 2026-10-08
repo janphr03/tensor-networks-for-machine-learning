@@ -151,7 +151,7 @@
   heading(numbering: none, outlined: listed, title)
 }
 
-#let figure-list(kind, title) = {
+#let figure-list(kind, title, short-captions: (:)) = {
   unnumbered(title)
   context {
     let items = query(figure.where(kind: kind, outlined: true))
@@ -160,10 +160,18 @@
     } else {
       show outline.entry: it => context {
         show link: set text(fill: black)
+        let short-title = if it.element.has("label") {
+          short-captions.at(str(it.element.label), default: none)
+        } else { none }
+        let entry-body = if short-title == none {
+          it.inner()
+        } else {
+          [#short-title #h(1fr) #counter(page).display(at: it.element.location())]
+        }
         block(inset: (y: 3pt), link(it.element.location(), it.indented(
           counter(figure.where(kind: kind)).display(
             it.element.numbering, at: it.element.location()),
-          it.inner(),
+          entry-body,
         )))
       }
       outline(title: none, target: figure.where(kind: kind), indent: auto)

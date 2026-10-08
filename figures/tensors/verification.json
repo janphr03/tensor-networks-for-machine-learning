@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-08",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "Ledger addresses and reversible unfolding",
+      "status": "passed",
+      "details": {
+        "tensorShape": [
+          2,
+          3,
+          2
+        ],
+        "matrixShape": [
+          2,
+          6
+        ],
+        "highlightedValue": 11
+      }
+    },
+    {
+      "name": "Outer product and rank-one minors",
+      "status": "passed",
+      "details": {
+        "entries": [
+          [
+            3,
+            4,
+            5
+          ],
+          [
+            6,
+            8,
+            10
+          ]
+        ],
+        "rank": 1
+      }
+    },
+    {
+      "name": "Signed contraction and matrix contraction",
+      "status": "passed",
+      "details": {
+        "signedSum": 8
+      }
+    },
+    {
+      "name": "SVD spectrum and discarded-layer errors",
+      "status": "passed",
+      "details": {
+        "singularValues": [
+          8.999999999999998,
+          3.0000000000000004,
+          1.0000000000000013,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "errors": [
+          3.1622776601683795,
+          1,
+          0
+        ],
+        "storage": {
+          "dense": 64,
+          "oneLayer": 17,
+          "twoLayers": 34,
+          "threeLayers": 51
+        }
+      }
+    },
+    {
+      "name": "TT contraction agrees with direct two-term expression",
+      "status": "passed",
+      "details": {
+        "checkedEntries": 64,
+        "cutRanks": [
+          2,
+          2
+        ],
+        "denseStorage": 64,
+        "ttStorage": 32,
+        "T_4_2_3": 3
+      }
+    },
+    {
+      "name": "Contraction order preserves values and independently counts multiplications",
+      "status": "passed",
+      "details": {
+        "counts": [
+          4800,
+          280
+        ],
+        "intermediateEntries": [
+          1200,
+          4
+        ],
+        "difference": 2.6133801636855952e-14
+      }
+    },
+    {
+      "name": "Gauge transformation and coordinate translation preserve the object",
+      "status": "passed",
+      "details": {
+        "original": 11,
+        "transformed": 11,
+        "newVectorCoordinates": [
+          1,
+          -2
+        ]
+      }
+    },
+    {
+      "name": "QR orthogonality and absorption into the neighbour",
+      "status": "passed",
+      "details": {
+        "orthogonalityError": 1.962615573354719e-16
+      }
+    },
+    {
+      "name": "Product features recover the bilinear prediction and its changing slope",
+      "status": "passed",
+      "details": {
+        "prediction": 0.6360000000000001,
+        "slopeAt_b_minus_0_4": 0.28
+      }
+    },
+    {
+      "name": "Core gradients agree with independent finite differences",
+      "status": "passed",
+      "details": {
+        "checkedParameters": 16,
+        "maximumGradientError": 1.0115112220043798e-10
+      }
+    },
+    {
+      "name": "The illustrated learning run actually reduces error",
+      "status": "passed",
+      "details": {
+        "steps": 1800,
+        "beforeMse": 0.364406881549866,
+        "afterMse": 0.0002902588172391133,
+        "referenceCurveMse": 0.000008353611259540776
+      }
+    },
+    {
+      "name": "Generated figure manifest and training data agree with the verified examples",
+      "status": "passed",
+      "details": {
+        "originalVectorFigures": 11,
+        "externalAssets": 0
+      }
+    }
+  ]
+}

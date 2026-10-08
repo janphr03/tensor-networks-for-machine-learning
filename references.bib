@@ -1,8 +1,11 @@
 ﻿% Add your own sources here in BibLaTeX format.
 % Cite in main.typ: @source-key or #cite(<source-key>, supplement: [p. 12]).
 
-% Initial reading sources for Chapter 2. Extend the forecasting literature review
-% before selecting models; foundational papers are not a current SOTA ranking.
+% Curated foundations and forecasting candidates, reviewed on 2026-10-07.
+% See notes/chapter-2-learning-guide.md for recommended chapters and sections.
+% See notes/tensor-model-literature-review.md for task-specific model evidence.
+% Forecasting accuracy is primary; parameter count and resources are secondary.
+% Foundational papers and initial candidates are not a complete current ranking.
 
 @book{goodfellow2016,
   author = {Ian Goodfellow and Yoshua Bengio and Aaron Courville},
@@ -110,4 +113,227 @@
   archivePrefix = {arXiv},
   note = {arXiv preprint},
   url = {https://arxiv.org/abs/2511.09233}
+}
+
+@book{james2023,
+  author = {Gareth James and Daniela Witten and Trevor Hastie and Robert Tibshirani and Jonathan Taylor},
+  title = {An Introduction to Statistical Learning: with Applications in Python},
+  publisher = {Springer},
+  location = {Cham},
+  year = {2023},
+  doi = {10.1007/978-3-031-38747-0},
+  url = {https://www.statlearning.com/}
+}
+
+@inproceedings{chen2016,
+  author = {Tianqi Chen and Carlos Guestrin},
+  title = {{XGBoost}: A Scalable Tree Boosting System},
+  booktitle = {Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  year = {2016},
+  pages = {785--794},
+  doi = {10.1145/2939672.2939785},
+  url = {https://arxiv.org/abs/1603.02754}
+}
+
+@misc{bai2018,
+  author = {Shaojie Bai and J. Zico Kolter and Vladlen Koltun},
+  title = {An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling},
+  year = {2018},
+  eprint = {1803.01271},
+  archivePrefix = {arXiv},
+  note = {arXiv preprint},
+  url = {https://arxiv.org/abs/1803.01271}
+}
+
+@inproceedings{zeng2023,
+  author = {Ailing Zeng and Muxi Chen and Lei Zhang and Qiang Xu},
+  title = {Are Transformers Effective for Time Series Forecasting?},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  year = {2023},
+  volume = {37},
+  number = {9},
+  pages = {11121--11128},
+  doi = {10.1609/aaai.v37i9.26317},
+  url = {https://ojs.aaai.org/index.php/AAAI/article/view/26317}
+}
+
+@inproceedings{oreshkin2020,
+  author = {Boris N. Oreshkin and Dmitri Carpov and Nicolas Chapados and Yoshua Bengio},
+  title = {{N-BEATS}: Neural Basis Expansion Analysis for Interpretable Time Series Forecasting},
+  booktitle = {International Conference on Learning Representations},
+  year = {2020},
+  url = {https://arxiv.org/abs/1905.10437}
+}
+
+@inproceedings{liu2024,
+  author = {Yong Liu and Tengge Hu and Haoran Zhang and Haixu Wu and Shiyu Wang and Lintao Ma and Mingsheng Long},
+  title = {{iTransformer}: Inverted Transformers Are Effective for Time Series Forecasting},
+  booktitle = {International Conference on Learning Representations},
+  year = {2024},
+  url = {https://proceedings.iclr.cc/paper_files/paper/2024/hash/2ea18fdc667e0ef2ad82b2b4d65147ad-Abstract-Conference.html}
+}
+
+@article{qiu2024,
+  author = {Xiangfei Qiu and Jilin Hu and Lekui Zhou and Xingjian Wu and Junyang Du and Buang Zhang and Chenjuan Guo and Aoying Zhou and Christian S. Jensen and Zhenli Sheng and Bin Yang},
+  title = {{TFB}: Towards Comprehensive and Fair Benchmarking of Time Series Forecasting Methods},
+  journal = {Proceedings of the VLDB Endowment},
+  year = {2024},
+  volume = {17},
+  number = {9},
+  pages = {2363--2377},
+  doi = {10.14778/3665844.3665863},
+  url = {https://www.vldb.org/pvldb/vol17/p2363-hu.pdf}
+}
+
+@misc{yu2019,
+  author = {Rose Yu and Stephan Zheng and Anima Anandkumar and Yisong Yue},
+  title = {Long-term Forecasting using Higher Order Tensor {RNNs}},
+  year = {2019},
+  eprint = {1711.00073},
+  archivePrefix = {arXiv},
+  note = {arXiv preprint, version 3; originally submitted in 2017},
+  url = {https://arxiv.org/abs/1711.00073v3}
+}
+
+@inproceedings{shi2020,
+  author = {Qiquan Shi and Jiaming Yin and Jiajun Cai and Andrzej Cichocki and Tatsuya Yokota and Lei Chen and Mingxuan Yuan and Jia Zeng},
+  title = {Block Hankel Tensor {ARIMA} for Multiple Short Time Series Forecasting},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  year = {2020},
+  volume = {34},
+  number = {4},
+  pages = {5758--5766},
+  doi = {10.1609/aaai.v34i04.6032},
+  url = {https://ojs.aaai.org/index.php/AAAI/article/view/6032}
+}
+
+@article{meng2021,
+  author = {Xiangyi Meng and Tong Yang},
+  title = {Entanglement-Structured {LSTM} Boosts Chaotic Time Series Forecasting},
+  journal = {Entropy},
+  year = {2021},
+  volume = {23},
+  number = {11},
+  pages = {1491},
+  doi = {10.3390/e23111491},
+  url = {https://www.mdpi.com/1099-4300/23/11/1491}
+}
+
+@inproceedings{su2020,
+  author = {Jiahao Su and Wonmin Byeon and Jean Kossaifi and Furong Huang and Jan Kautz and Anima Anandkumar},
+  title = {Convolutional Tensor-Train {LSTM} for Spatio-temporal Learning},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year = {2020},
+  volume = {33},
+  url = {https://arxiv.org/abs/2002.09131}
+}
+
+@misc{xu2021,
+  author = {Yao Lei Xu and Giuseppe G. Calvi and Danilo P. Mandic},
+  title = {Tensor-Train Recurrent Neural Networks for Interpretable Multi-Way Financial Forecasting},
+  year = {2021},
+  eprint = {2105.04983},
+  archivePrefix = {arXiv},
+  note = {arXiv preprint, version 1},
+  url = {https://arxiv.org/abs/2105.04983v1}
+}
+
+@misc{martinez2026,
+  author = {Rodrigo Mart{\'i}nez-Pe{\~n}a and Rom{\'a}n Or{\'u}s},
+  title = {A Tensor Network Approach for Chaotic Time Series Prediction},
+  year = {2026},
+  eprint = {2505.17740},
+  archivePrefix = {arXiv},
+  note = {arXiv preprint, version 2, revised 16 June 2026; originally submitted in 2025},
+  url = {https://arxiv.org/abs/2505.17740v2}
+}
+
+@article{kobayashi2023,
+  author = {Nozomu Kobayashi and Yoshiyuki Suimon and Koichi Miyamoto and Kosuke Mitarai},
+  title = {The Cross-Sectional Stock Return Predictions via Quantum Neural Network and Tensor Network},
+  journal = {Quantum Machine Intelligence},
+  year = {2023},
+  volume = {5},
+  pages = {46},
+  doi = {10.1007/s42484-023-00136-x},
+  url = {https://link.springer.com/article/10.1007/s42484-023-00136-x}
+}
+
+@misc{dacosta2021,
+  author = {M. Nazareth da Costa and R. Attux and A. Cichocki and J. M. T. Romano},
+  title = {Tensor-Train Networks for Learning Predictive Modeling of Multidimensional Data},
+  year = {2021},
+  eprint = {2101.09184},
+  archivePrefix = {arXiv},
+  note = {Results refer to arXiv version 3, dated 30 March 2021},
+  url = {https://arxiv.org/abs/2101.09184v3}
+}
+
+@misc{datevRewe,
+  author = {{DATEV eG}},
+  title = {{DATEV} Datenservice Export Rechnungswesen},
+  url = {https://www.datev.de/web/de/shop/produkt-details/datev-datenservice-export-rechnungswesen-92913},
+  urldate = {2026-10-07},
+  note = {Public application context; not documentation of the research dataset}
+}
+
+@article{orus2014,
+  author = {Rom{\'a}n Or{\'u}s},
+  title = {A Practical Introduction to Tensor Networks: Matrix Product States and Projected Entangled Pair States},
+  journal = {Annals of Physics},
+  volume = {349},
+  pages = {117--158},
+  year = {2014},
+  doi = {10.1016/j.aop.2014.06.013},
+  url = {https://arxiv.org/abs/1306.2164}
+}
+
+@misc{cichocki2017,
+  author = {Andrzej Cichocki and Namgil Lee and Ivan V. Oseledets and Anh-Huy Phan and Qibin Zhao and Danilo P. Mandic},
+  title = {Low-Rank Tensor Networks for Dimensionality Reduction and Large-Scale Optimization Problems: Perspectives and Challenges, Part 1},
+  year = {2017},
+  eprint = {1609.00893},
+  archivePrefix = {arXiv},
+  note = {Expanded arXiv version 3, 11 September 2017; journal version published in 2016},
+  url = {https://arxiv.org/abs/1609.00893v3}
+}
+
+@misc{lee2016,
+  author = {Namgil Lee and Andrzej Cichocki},
+  title = {Fundamental Tensor Operations for Large-Scale Data Analysis in Tensor Train Formats},
+  year = {2016},
+  eprint = {1405.7786},
+  archivePrefix = {arXiv},
+  note = {arXiv version 2, 25 February 2016},
+  url = {https://arxiv.org/abs/1405.7786v2}
+}
+
+@article{perez2007,
+  author = {D. P{\'e}rez-Garc{\'i}a and F. Verstraete and M. M. Wolf and J. I. Cirac},
+  title = {Matrix Product State Representations},
+  journal = {Quantum Information and Computation},
+  volume = {7},
+  number = {5--6},
+  pages = {401--430},
+  year = {2007},
+  url = {https://arxiv.org/abs/quant-ph/0608197}
+}
+
+@inproceedings{kingma2015,
+  author = {Diederik P. Kingma and Jimmy Ba},
+  title = {Adam: A Method for Stochastic Optimization},
+  booktitle = {International Conference on Learning Representations},
+  year = {2015},
+  url = {https://arxiv.org/abs/1412.6980}
+}
+
+@article{eckart1936,
+  author = {Carl Eckart and Gale Young},
+  title = {The Approximation of One Matrix by Another of Lower Rank},
+  journal = {Psychometrika},
+  volume = {1},
+  pages = {211--218},
+  year = {1936},
+  doi = {10.1007/BF02288367},
+  url = {https://link.springer.com/article/10.1007/BF02288367}
 }
