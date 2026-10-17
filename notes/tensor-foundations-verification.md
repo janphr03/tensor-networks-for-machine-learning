@@ -1,7 +1,7 @@
 # Verifizierung der generischen Tensorgrundlagen
 
 Stand: **8. Oktober 2026**. Geprüfter Text: Abschnitte **2.4–2.6**, eingebunden
-in [main.typ](../main.typ) und separat lesbar über [tensor-foundations.typ](../tensor-foundations.typ).
+in [thesis.typ](../thesis.typ) und separat lesbar über [tensor-foundations.typ](../tensor-foundations.typ).
 
 ## Inhalt und Quellen
 
@@ -40,7 +40,7 @@ die Quelle der gezeichneten Ledgerwerte, Muster oder Trainingsbeobachtungen.
 
 Das [Verifizierungsskript](../scripts/verify-tensor-foundations.mjs) führt zwölf
 Prüffälle aus. Die vollständigen Resultate stehen in
-[verification.json](../figures/tensors/verification.json).
+[verification.json](../assets/tensors/verification.json).
 
 | Prüfbereich | Unabhängige Kontrolle | Ergebnis |
 | --- | --- | --- |
@@ -98,8 +98,8 @@ Vom Projektverzeichnis aus:
 
     node scripts/build-tensor-figures.mjs
     node scripts/verify-tensor-foundations.mjs
-    typst compile --font-path fonts main.typ thesis.pdf
-    typst compile --font-path fonts tensor-foundations.typ tensor-foundations.pdf
+    typst compile thesis.typ thesis.pdf
+    typst compile tensor-foundations.typ tensor-foundations.pdf
 
 Das numerische Skript benötigt keine zusätzlichen Node-Pakete. Die
-verwendeten Originalquellen sind in [references.bib](../references.bib) hinterlegt.
+verwendeten Originalquellen sind in [literature.bib](../literature.bib) hinterlegt.

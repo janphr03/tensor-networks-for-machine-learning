@@ -24,7 +24,7 @@ $r_2 times K$. They are called *cores*. Computing one entry means adding the
 products for every allowed pair $(alpha,beta)$.
 
 #figure(
-  image("../figures/tensors/06-latent-relay.svg", width: 100%,
+  image("../assets/tensors/06-latent-relay.svg", width: 100%,
     alt: "Three local tensor descriptions are linked by bonds with two possible latent labels."),
   caption: [
     A relay metaphor for @eq-three-core. The two coloured lanes stand for two
@@ -114,7 +114,7 @@ factorizations are described by Kolda and Bader
 #cite(<kolda2009>, supplement: [Secs. 3 and 4]).
 
 #figure(
-  image("../figures/tensors/07-network-topologies.svg", width: 100%,
+  image("../assets/tensors/07-network-topologies.svg", width: 100%,
     alt: "CP as shared selection, Tucker as a mixing hub, TT as a string, MPO as paired legs, and a branching tensor tree."),
   caption: [
     Organisational pictures of common tensor representations. CP shares one
@@ -182,7 +182,7 @@ $ 2 dot 30 dot 2 + 40 dot 2 dot 2 = 280 $
 scalar multiplications and creates a $2 times 2$ intermediate.
 
 #figure(
-  image("../figures/tensors/08-contraction-packing.svg", width: 100%,
+  image("../assets/tensors/08-contraction-packing.svg", width: 100%,
     alt: "Combining the small inner factors first avoids a large temporary matrix while preserving the result."),
   caption: [
     Contraction order as packing before carrying. The small thumbnails use the
@@ -219,7 +219,7 @@ Then $A B=11$, $A G=mat(2,-1)$, and $G^(-1) B=mat(4;-3)$. The transformed produc
 is again $2 dot 4+(-1) dot (-3)=11$.
 
 #figure(
-  image("../figures/tensors/09-gauge-coordinates.svg", width: 100%,
+  image("../assets/tensors/09-gauge-coordinates.svg", width: 100%,
     alt: "One vector has different coordinates in original and rotated bases, illustrating compensating changes on a tensor bond."),
   caption: [
     Gauge freedom as a change of coordinate language. The same vector has

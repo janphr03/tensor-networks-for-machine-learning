@@ -1,6 +1,6 @@
 # Lern- und Quellenplan für die umgegliederte Arbeit
 
-Literaturrecherche: **7. Oktober 2026**; Bearbeitungsstand: **8. Oktober 2026**. Die Grundlagen in **2.4–2.6** sind jetzt als didaktischer englischer Text mit elf originalen Vektorgrafiken ausformuliert und in [main.typ](../main.typ) eingebunden. Die übrigen Abschnitte enthalten weiterhin Schreibaufträge. Zum Lesen des Grundlagenblocks gibt es [tensor-foundations.typ](../tensor-foundations.typ) und die daraus erzeugte PDF. Die [Verifizierungsnotiz](tensor-foundations-verification.md) beschreibt Quellen- und Zahlenprüfung.
+Literaturrecherche: **7. Oktober 2026**; Bearbeitungsstand: **8. Oktober 2026**. Die Grundlagen in **2.4–2.6** sind jetzt als didaktischer englischer Text mit elf originalen Vektorgrafiken ausformuliert und in [thesis.typ](../thesis.typ) eingebunden. Die übrigen Abschnitte enthalten weiterhin Schreibaufträge. Zum Lesen des Grundlagenblocks gibt es [tensor-foundations.typ](../tensor-foundations.typ) und die daraus erzeugte PDF. Die [Verifizierungsnotiz](tensor-foundations-verification.md) beschreibt Quellen- und Zahlenprüfung.
 
 **Bekannt:** Die Forschungsdaten stammen laut Projektangabe von **DATEV**. Der Vergleich soll der Forschungsgruppe als Grundlage für ihre Quantenalgorithmen dienen. **Noch offen:** konkrete Variablen, Zeitauflösung, Anzahl und Länge der Reihen, Zielgröße und Prognosehorizont. Buchhaltungs- oder betriebliche Kennzahlen sind mögliche Anwendungen; Börsenkurse sind durch die Herkunft nicht bestätigt.
 

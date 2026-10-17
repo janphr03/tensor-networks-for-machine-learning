@@ -30,7 +30,7 @@ $ (partial hat(y))/(partial a) = 0.8 + 1.3 b. $
 For example, the prediction at $(a,b)=(0.2,-0.4)$ is $0.636$.
 
 #figure(
-  image("../figures/tensors/10-interaction-sheet.svg", width: 100%,
+  image("../assets/tensors/10-interaction-sheet.svg", width: 100%,
     alt: "An additive prediction is a plane; a product interaction bends it into a bilinear surface."),
   caption: [
     An interaction as a bending sheet. Both surfaces use identical axes and
@@ -77,7 +77,7 @@ with the corresponding indices held fixed. In a prediction model, local
 feature factors contribute to the derivative as well.
 
 #figure(
-  image("../figures/tensors/11-learning-curve.svg", width: 100%,
+  image("../assets/tensors/11-learning-curve.svg", width: 100%,
     alt: "A blue TT prediction curve moves toward noisy observations as three tensor cores are trained."),
   caption: [
     An actual small training run with synthetic observations. Three TT cores

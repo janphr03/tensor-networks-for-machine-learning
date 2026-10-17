@@ -26,7 +26,7 @@ respectively. These conventions follow the distinction between order and
 decomposition rank used by Kolda and Bader #cite(<kolda2009>, supplement: [Sec. 2]).
 
 #figure(
-  image("../figures/tensors/01-indexed-ledger.svg", width: 100%,
+  image("../assets/tensors/01-indexed-ledger.svg", width: 100%,
     alt: "Two indexed ledger pages illustrate series, time, and variable axes."),
   caption: [
     A tensor as an indexed ledger. The values are invented for illustration.
@@ -60,7 +60,7 @@ With $u=(1,2)^T$ and $v=(3,4,5)^T$,
 $ u v^T = mat(3,4,5;6,8,10). $
 
 #figure(
-  image("../figures/tensors/03-outer-product-loom.svg", width: 100%,
+  image("../assets/tensors/03-outer-product-loom.svg", width: 100%,
     alt: "A loom retains six pairwise products at the crossings of two row threads and three column threads."),
   caption: [
     The outer product retains all pairwise products. A crossing is an entry of
@@ -86,7 +86,7 @@ The column addresses are then
 $(1,1),(1,2),(2,1),(2,2),(3,1),(3,2)$.
 
 #figure(
-  image("../figures/tensors/02-unfolding-pages.svg", width: 100%,
+  image("../assets/tensors/02-unfolding-pages.svg", width: 100%,
     alt: "Two ledger pages become a two-by-six matrix with explicit time-variable column addresses."),
   caption: [
     Unfolding reorganises the ledger. The highlighted value eleven moves to row
@@ -116,7 +116,7 @@ $ s = 1 dot 4 + 2 dot (-1) + 3 dot 2 = 8. $
 The index $k$ identifies matching pairs before it is summed out.
 
 #figure(
-  image("../figures/tensors/04-contraction-lanes.svg", width: 100%,
+  image("../assets/tensors/04-contraction-lanes.svg", width: 100%,
     alt: "Three matching lanes contribute four, minus two, and six to a scalar total of eight."),
   caption: [
     Contraction matches an index and adds its signed contributions. The orange
@@ -172,7 +172,7 @@ The result concerns approximation of a specified matrix; predictive generalizati
 is a separate question.
 
 #figure(
-  image("../figures/tensors/05-svd-pattern-layers.svg", width: 100%,
+  image("../assets/tensors/05-svd-pattern-layers.svg", width: 100%,
     alt: "An eight-by-eight pattern is reconstructed from one, two, and three singular layers with singular values nine, three, and one."),
   caption: [
     A constructed matrix with singular values $(9,3,1)$ illustrates SVD
