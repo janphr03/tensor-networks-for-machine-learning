@@ -8,7 +8,7 @@ import {
 } from './tensor-examples.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const outDir = path.join(projectRoot, 'figures', 'tensors');
+const outDir = path.join(projectRoot, 'assets', 'tensors');
 fs.mkdirSync(outDir, {recursive: true});
 const C = {ink: '#173552', blue: '#2166AC', teal: '#008C82', orange: '#D46B32',
   gray: '#617185', light: '#E8EEF4', pale: '#F5F8FB', white: '#FFFFFF'};

@@ -1,9 +1,12 @@
-#import "layout.typ": *
-
+// Standalone reading copy without front matter; base settings mirror template.typ.
 #set document(title: "Tensor Network Foundations: Concepts, Examples, and Visual Metaphors")
-#show: thesis
-#set page(numbering: "1", foreground: running-header(), footer: page-footer())
-#set heading(numbering: "1.1", supplement: [Section])
+#set page(paper: "a4", margin: 2.5cm, numbering: "1")
+#set text(font: "Libertinus Serif", size: 12pt, hyphenate: false, lang: "en", ligatures: true)
+#set par(leading: 8pt, justify: true, linebreaks: "optimized")
+#show figure: set par(justify: false)
+#set figure(numbering: "I")
+#set math.equation(numbering: "(1)")
+#set heading(numbering: "1.1")
 #counter(heading).update(1)
 
 = Theoretical Background <background>
@@ -18,4 +21,4 @@ values and shapes are independent of the research dataset.
 #include "chapters/tensor-network-principles.typ"
 #include "chapters/tensor-learning-models.typ"
 
-#sources("references.bib")
+#bibliography("literature.bib", title: "Bibliography", style: "/ieee-modified.csl")

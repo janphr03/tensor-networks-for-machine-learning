@@ -163,11 +163,11 @@ check('The illustrated learning run actually reduces error',()=>{
   return {steps:trained.steps,beforeMse:trained.beforeMse,afterMse:trained.afterMse,referenceCurveMse:trained.referenceMse};
 });
 check('Generated figure manifest and training data agree with the verified examples',()=>{
-  const manifest=JSON.parse(fs.readFileSync(path.join(root,'figures/tensors/manifest.json'),'utf8'));
+  const manifest=JSON.parse(fs.readFileSync(path.join(root,'assets/tensors/manifest.json'),'utf8'));
   assert.equal(manifest.figures.length,11);
   assert.equal(new Set(manifest.figures.map(f=>f.name)).size,11);
   for(const fig of manifest.figures) {
-    const content=fs.readFileSync(path.join(root,'figures/tensors',fig.name+'.svg'),'utf8');
+    const content=fs.readFileSync(path.join(root,'assets/tensors',fig.name+'.svg'),'utf8');
     assert.ok(content.startsWith('<svg ')&&content.endsWith('</svg>'));
     assert.ok(!/NaN|Infinity|<script\b|https?:\/\//.test(content.replace('http://www.w3.org/2000/svg','')));
     assert.ok(content.includes('<title ')&&content.includes('<desc '));
@@ -177,5 +177,5 @@ check('Generated figure manifest and training data agree with the verified examp
   return {originalVectorFigures:11,externalAssets:0};
 });
 const report={date:'2026-10-08',status:'passed',checks};
-fs.writeFileSync(path.join(root,'figures/tensors/verification.json'),JSON.stringify(report,null,2)+'\n');
+fs.writeFileSync(path.join(root,'assets/tensors/verification.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));

@@ -10,8 +10,7 @@
     },
     "tinymist.formatterMode": "typstyle",
     "tinymist.rootPath": "${workspaceFolder}",
-    "tinymist.fontPaths": ["${workspaceFolder}/fonts"],
-    "tinymist.typstExtraArgs": ["main.typ"],
+    "tinymist.typstExtraArgs": ["thesis.typ"],
     "tinymist.exportPdf": "never",
     "tinymist.preview.refresh": "onSave",
     "terminal.integrated.env.windows": {
@@ -33,8 +32,7 @@
         "command": "${workspaceFolder}/.tools/typst/typst.exe",
         "args": [
           "compile", "--root", "${workspaceFolder}",
-          "--font-path", "${workspaceFolder}/fonts",
-          "${workspaceFolder}/main.typ", "${workspaceFolder}/thesis.pdf"
+          "${workspaceFolder}/thesis.typ", "${workspaceFolder}/thesis.pdf"
         ],
         "options": { "cwd": "${workspaceFolder}" },
         "group": { "kind": "build", "isDefault": true },
