@@ -12,7 +12,7 @@
     "tinymist.rootPath": "${workspaceFolder}",
     "tinymist.fontPaths": ["${workspaceFolder}/fonts"],
     "tinymist.typstExtraArgs": ["main.typ"],
-    "tinymist.exportPdf": "never",
+    "tinymist.exportPdf": "onSave",
     "tinymist.preview.refresh": "onSave",
     "terminal.integrated.env.windows": {
       "PATH": "${workspaceFolder}\\.tools\\typst;${env:PATH}"

@@ -1,5 +1,9 @@
 #import "layout.typ": *
 
+
+
+
+
 // Edit your title and personal details here.
 #let data = (
   title: "Tensor Networks for Machine Learning",
@@ -69,6 +73,24 @@
   "fig-gauge": [Gauge freedom as a coordinate translation],
   "fig-interaction": [Interactions as a bending sheet],
   "fig-learning": [A tensor model learns a curve],
+  "fig-roadmap": [Structure of the theoretical background],
+  "fig-ts-tracks": [Hourly observations in time order],
+  "fig-ts-multivariate": [Several quantities measured at the same times],
+  "fig-ts-trend": [Trend: a longer-term increase],
+  "fig-ts-seasonality": [Seasonality: repeating at fixed intervals],
+  "fig-ts-cycles": [Cycles: varying intervals between peaks],
+  "fig-ts-window": [From past observations to future prediction targets],
+  "fig-ml-naive": [Naive forecast: repeat the last value],
+  "fig-ml-seasonal": [Seasonal naive forecast: repeat the previous day],
+  "fig-ml-windows": [One training example from historical measurements],
+  "fig-ml-training": [Learning from prediction errors],
+  "fig-ml-linear": [Linear lag regression as a weighted sum],
+  "fig-ml-trees": [Decision trees and gradient boosting],
+  "fig-ml-recurrent": [A recurrent network with memory],
+  "fig-ml-feedforward": [A feed-forward network with intermediate units],
+  "fig-ml-patches": [Attention: different inputs can emphasize different past intervals],
+  "fig-ml-task-training": [Learning from the task's own training data],
+  "fig-ml-pretrained": [Reusing training experience from other time series],
 ))
 #figure-list(table, [List of Tables])
 #appendix-list()
@@ -137,113 +159,51 @@
 ]
 
 = Theoretical Background <background>
-#placeholder[
-  Start with the forecasting problem, explain established solutions, and then
-  motivate the tensor-based approach. Introduce mathematics where it becomes
-  necessary. Develop possible advantages as hypotheses whose validity must
-  be assessed empirically.
-]
 
-// Sections 2.4–2.6 are drafted with original numerical examples and vector figures.
-// Adjust the other learning scaffolds once the datasets and models are selected.
-// Planning target: about 28–35 pages within the 80–100-page study.
-// Reading map: notes/chapter-2-learning-guide.md.
-// Dated model evidence: notes/tensor-model-literature-review.md.
+This chapter builds the foundation for comparing tensor-based forecasting models
+with established machine-learning methods. It starts with the forecasting
+problem itself: what a time series is, what can be predicted, and what a
+forecast may know (@time-series-foundations). It then introduces the
+established methods that serve as competitors, from simple benchmarks to
+pretrained models (@forecasting-ml-foundations). The tensor route follows: the
+motivation for tensor-based models (@tensor-motivation), their mathematics
+(@tensor-foundations), tensor networks (@tensor-network-foundations), and their
+use as learning models (@tensor-network-ml). Both routes meet in the evaluation
+methodology (@evaluation-foundations) and in the review of published evidence
+(@related-work). @fig-roadmap shows this structure.
 
-== Time-Series Forecasting <time-series-foundations>
-#placeholder[
-  Define the application and forecasting task before introducing model
-  architectures. Establish what the data represent and what information is
-  available when a prediction is made.
-]
+#figure(
+  image(
+    "figures/forecasting/00-roadmap.svg",
+    width: 100%,
+    alt: "Section 2.1 leads to two routes: established methods in Section 2.2 and the tensor route through Sections 2.3 to 2.6. Both routes meet in fair evaluation, Section 2.7, and the evidence review, Section 2.8.",
+  ),
+  caption: [
+    Structure of the theoretical background. After the common basics, the
+    machine-learning route and the tensor route are developed separately and
+    meet again in the evaluation methodology and the evidence review.
+  ],
+) <fig-roadmap>
 
-=== Time Series and Motivation for Forecasting
-#placeholder[
-  Define a time series, its time index, sampling frequency, and univariate or
-  multivariate form. Give an illustrative example and explain the practical
-  purpose of forecasting. Replace the example with the professor's actual data
-  once available. Financial prices, returns, or volatility require different
-  targets and must be distinguished if finance becomes the application.
-  Starting reference: #cite(<hyndman2021>).
-]
+// Sections 2.1–2.2 and 2.4–2.6 are drafted with original figures.
+// Figures: figures/forecasting (node scripts/build-forecasting-figures.mjs)
+// and figures/tensors (node scripts/build-tensor-figures.mjs).
+// Planning target: about 30–35 pages within the 80–100-page study.
+// Plan: notes/grundlagen-bauplan-modellauswahl.md; reading map: notes/chapter-2-learning-guide.md.
 
-=== Temporal Structure and Predictability
-#placeholder[
-  Explain trend, seasonality, noise, autocorrelation, stationarity, and changing
-  data distributions. Relate temporal and cross-variable dependencies to what a
-  forecasting model might learn. Introduce chaotic dynamics only if the actual
-  datasets justify it. Starting reference:
-  #cite(<hyndman2021>, supplement: [Secs. 2.3, 2.8, and 9.1]).
-]
+#include "chapters/time-series-forecasting.typ"
 
-=== Forecasting Tasks, Windows, and Available Information
-#placeholder[
-  Define targets, input windows, forecast horizons, covariates, and direct or
-  recursive multi-step prediction. Illustrate chronological data partitions
-  and explain why preprocessing must use only information available at the
-  forecast origin. Specify the actual pipeline later in @methodology.
-  Starting reference: #cite(<hyndman2021>, supplement: [Secs. 5.8 and 5.10]).
-]
-
-== Established Forecasting Methods <forecasting-ml-foundations>
-#placeholder[
-  Explain the relevant statistical, classical machine-learning, and neural
-  forecasting approaches. Develop the models used in the experiment in depth;
-  keep the other families as orientation.
-]
-
-=== Simple and Statistical Baselines
-#placeholder[
-  Introduce naive and seasonal-naive forecasts and explain the rationale for
-  using them as reference points. Outline autoregression and ARIMA; add ETS or
-  vector autoregression if the selected data warrant them. If forecasting
-  financial price levels, include the last-observation or random-walk baseline.
-  Starting reference: #cite(<hyndman2021>, supplement: [Sec. 5.2 and Ch. 9]).
-]
-
-=== Supervised Learning, Optimization, and Generalization
-#placeholder[
-  Introduce regression, model parameters, hyperparameters, training losses,
-  optimization, regularization, and early stopping. Explain the difference
-  between fitting training data and predicting unseen future observations.
-  Establish basic vector and probability notation as needed.
-  Starting references: #cite(<james2023>, supplement: [Ch. 2]) and
-  #cite(<goodfellow2016>, supplement: [Chs. 5, 7, and 8]).
-]
-
-=== Classical Machine Learning with Lagged Features
-#placeholder[
-  Explain how lagged observations and known covariates turn forecasting into a
-  supervised prediction task. Introduce linear or ridge regression and
-  tree-based methods such as gradient boosting. Add support vector regression
-  only if it is selected. Explain how these methods receive temporal
-  information through the feature representation.
-  Starting references: #cite(<james2023>, supplement: [Chs. 3, 6, and 8]) and
-  #cite(<chen2016>).
-]
-
-=== Neural Forecasting Architectures
-#placeholder[
-  Explain linear and MLP-based forecasters, RNNs and LSTMs, temporal
-  convolutions, and attention. Connect each architecture to input windows and
-  forecast outputs. Use DLinear, N-BEATS, PatchTST, and iTransformer as reading
-  examples, not as a fixed current ranking. Explain only the architectural
-  mechanisms that are relevant to the eventual comparison.
-  Starting references: #cite(<goodfellow2016>, supplement: [Chs. 6, 9, and 10]),
-  #cite(<bai2018>), #cite(<vaswani2017>), #cite(<zeng2023>),
-  #cite(<oreshkin2020>), #cite(<nie2023>), and #cite(<liu2024>).
-]
-
-=== Pretraining and Time-Series Foundation Models
-#placeholder[
-  Explain dataset-specific training, zero-shot forecasting, and fine-tuning.
-  Consider a suitable pretrained forecaster as an additional accuracy-oriented
-  competitor, documenting its external training data and supported inputs.
-  Chronos-2 is a starting example; refresh the candidate list when the datasets
-  and experiments are fixed. Starting reference: #cite(<ansari2025>).
-]
+#include "chapters/established-forecasting-methods.typ"
 
 == Motivation for Tensor-Based Forecasting <tensor-motivation>
+
+@forecasting-ml-foundations ended with models that are either simple but
+limited or powerful but large and hungry for data. Tensor methods aim between
+these extremes. Instead of adding parameters, they look for a few patterns that
+are shared across variables and time and build the model from them. This
+section states, as testable hypotheses, why this could make forecasts more
+accurate or cheaper, and when it should fail.
+
 #placeholder[
   Connect the requirements of forecasting to the tensor-based approach before
   introducing its formal mathematics. Distinguish tensors as data objects from
@@ -279,6 +239,13 @@
 #include "chapters/tensor-learning-models.typ"
 
 == Evaluating Forecasting Accuracy <evaluation-foundations>
+
+Both routes have now produced candidate models: the established methods
+(@forecasting-ml-foundations) and the tensor models (@tensor-network-ml). Which
+of them forecasts better can only be decided under identical, fair conditions.
+This section defines how accuracy and, second, efficiency are measured and
+compared.
+
 #placeholder[
   Make held-out forecast quality the main basis for model selection and
   comparison. Explain secondary resource metrics after the accuracy protocol.
@@ -315,6 +282,12 @@
 ]
 
 == Related Work and Evidence for Model Selection <related-work>
+
+Before own experiments are run, this section reviews what published studies
+already show for tensor-based and established forecasting models. It separates
+real accuracy evidence from claims about size or speed and identifies the gap
+that this study addresses.
+
 #placeholder[
   Review original papers and their exact benchmark scope. Separate evidence of
   lower numeric forecast error, improved direction classification, comparable

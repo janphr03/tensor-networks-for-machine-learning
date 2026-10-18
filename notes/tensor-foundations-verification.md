@@ -3,6 +3,8 @@
 Stand: **8. Oktober 2026**. Geprüfter Text: Abschnitte **2.4–2.6**, eingebunden
 in [main.typ](../main.typ) und separat lesbar über [tensor-foundations.typ](../tensor-foundations.typ).
 
+**Nachtrag 17. Oktober 2026:** Der Text der Abschnitte 2.4–2.6 wurde didaktisch gekürzt und beginnt jeweils mit einer kurzen Überleitung. Einige Rechenbeispiele stehen seitdem nicht mehr im Fließtext: die TT-Kerne U, V, W mit T(4,2,3) = 3, das Gauge-Zahlenbeispiel, die Vorhersage 0,636 und die Kerngradienten. Sie bleiben in den Skripten und Abbildungen enthalten und werden weiterhin geprüft. Alle Zahlen, die im Text verblieben sind, stimmen mit den Prüffällen überein.
+
 ## Inhalt und Quellen
 
 Der Grundlagenblock besteht aus drei ausformulierten englischen Abschnitten:

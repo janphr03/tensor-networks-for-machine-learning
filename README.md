@@ -1,4 +1,4 @@
-﻿# Tensor Networks for Machine Learning
+# Tensor Networks for Machine Learning
 
 Wir untersuchen, ob Tensor-Netzwerk-basierte ML-Modelle oder Hybridmodelle die Zeitreihen der Forschungsgruppe unseres Professors genauer vorhersagen können als starke etablierte Prognoseverfahren. Die Forschungsdaten stammen laut Projektangabe von **DATEV**; die konkreten Variablen, Zielgrößen, Zeitauflösung und Prognosehorizonte sind noch offen. Der Vergleich soll eine reproduzierbare klassische beziehungsweise quantum-inspired Grundlage für die Quantenalgorithmen der Forschungsgruppe liefern.
 
@@ -18,10 +18,13 @@ Die Grundlagen in `main.typ` folgen der Reihenfolge **Zeitreihen → etablierte 
 
 [tensor-foundations.typ](tensor-foundations.typ) erzeugt eine separate Lesefassung dieser Abschnitte. [figures/tensors/README.md](figures/tensors/README.md) beschreibt die Grafiken und ihre Erzeugung. Die fachlichen und numerischen Prüfungen sind in [notes/tensor-foundations-verification.md](notes/tensor-foundations-verification.md) dokumentiert.
 
+**Überarbeitete Grundlagen, Stand 18. Oktober 2026:** Die Abschnitte 2.1 und 2.2 erklären Zeitreihen, Prognosemuster, Lernen aus Beispielen und ausgewählte Vergleichsverfahren in einfachem Englisch. Durchgehende Temperaturbeispiele und eigene SVG-Grafiken verbinden die Abschnitte. 2.2.5 unterscheidet die Herkunft der Trainingsdaten von den aktuellen Eingabewerten. Die Texte liegen in `chapters/`; Aufbau und Erzeugung der Grafiken sind in [figures/forecasting/README.md](figures/forecasting/README.md) dokumentiert.
+
 Die Grafiken und Prüfungen benötigen Node.js ohne zusätzliche Pakete:
 
     node scripts/build-tensor-figures.mjs
     node scripts/verify-tensor-foundations.mjs
+    node scripts/build-forecasting-figures.mjs
 
 Mit Typst lassen sich die vollständige Arbeit und der separate Grundlagenblock bauen:
 

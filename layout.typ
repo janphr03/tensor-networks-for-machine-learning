@@ -48,10 +48,12 @@
   set par(justify: true, leading: 0.6em, spacing: 0.5em, first-line-indent: 0pt)
   set heading(numbering: none, supplement: [Section])
   set math.equation(numbering: "(1)")
-  set figure(numbering: "1")
+  set figure(numbering: "1", gap: 10pt)
+  show figure: set block(above: 16pt, below: 20pt)
   show figure.where(kind: image): set figure(supplement: [Figure])
   show figure.where(kind: table): set figure(supplement: [Table])
-  show figure.caption: set text(size: 10pt)
+  show figure.caption: set text(font: "Arial", size: 9.5pt, fill: rgb("4b5d72"))
+  show figure.caption: set par(justify: false, leading: 0.4em, spacing: 0pt)
   set terms(hanging-indent: 1cm, spacing: 0.9em)
   set table(stroke: none, inset: (x: 0pt, y: 4pt))
   show link: set text(fill: blue)
@@ -74,7 +76,8 @@
         text(size: 17.28pt, weight: "bold", it.body))
     })
   }
-  show heading.where(level: 2): it => block(above: 1.5em, below: 0.7em)[
+  show heading.where(level: 2): it => block(above: 18pt, below: 10pt,
+    inset: (top: 8pt, bottom: 6pt), sticky: true)[
     #text(size: 14.4pt, weight: "bold")[
       #context {
         if it.numbering != none {
@@ -85,8 +88,9 @@
       #it.body
     ]
   ]
-  show heading.where(level: 3): it => block(above: 1.1em, below: 0.55em)[
-    #text(size: 12pt, weight: "bold")[
+  show heading.where(level: 3): it => block(above: 16pt, below: 8pt,
+    inset: (top: 8pt, bottom: 6pt), sticky: true)[
+    #text(size: 12.5pt, weight: "bold", fill: blue)[
       #context {
         if it.numbering != none {
           text(fill: blue, counter(heading).display(it.numbering))

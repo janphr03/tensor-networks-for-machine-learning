@@ -1,0 +1,151 @@
+{
+  "figures": [
+    {
+      "name": "00-roadmap",
+      "width": 960,
+      "height": 440,
+      "title": "Structure of the theoretical background",
+      "description": "Section 2.1 leads to two routes: established methods in Section 2.2, and the tensor route through Sections 2.3 to 2.6. Both routes meet in fair evaluation, Section 2.7, and the evidence review, Section 2.8."
+    },
+    {
+      "name": "01-time-series-tracks",
+      "width": 960,
+      "height": 545,
+      "title": "A multivariate time series",
+      "description": "Three invented tracks measured at the same 48 hours: temperature with one dot per hour, relative humidity, and wind speed. One temperature observation at hour 30 is highlighted."
+    },
+    {
+      "name": "02-trend-season-noise",
+      "width": 960,
+      "height": 600,
+      "title": "Trend, seasonality, and noise",
+      "description": "An invented hourly series over four days and its three additive ingredients: a rising trend, a daily seasonal cycle, and irregular noise."
+    },
+    {
+      "name": "03-memory-and-random-walk",
+      "width": 960,
+      "height": 440,
+      "title": "Memory and the random walk",
+      "description": "Left: the autocorrelation of an invented hourly temperature series is high for short lags and peaks again at 24 and 48 hours. Right: a random walk history with five equally likely continuations; the naive forecast repeats the last value."
+    },
+    {
+      "name": "04-origin-window-horizon",
+      "width": 960,
+      "height": 440,
+      "title": "Forecast origin, input window, and horizon",
+      "description": "An invented hourly series is known up to the forecast origin. The last 24 values form the input window. The next 24 hours form the horizon, where only a forecast exists."
+    },
+    {
+      "name": "05-chronological-split",
+      "width": 960,
+      "height": 340,
+      "title": "Chronological split and rolling origins",
+      "description": "A series is divided in time into training, validation, and test parts. In the test part, forecasts start from several successive origins."
+    },
+    {
+      "name": "06-recursive-and-direct",
+      "width": 960,
+      "height": 430,
+      "title": "Recursive and direct multi-step forecasts",
+      "description": "Recursive: a one-step model is applied three times and its own forecasts move into the input window. Direct: one model returns all three future values at once."
+    },
+    {
+      "name": "07-repeat-last-value",
+      "width": 960,
+      "height": 245,
+      "title": "Measured history and forecast",
+      "description": "The forecast repeats the last observed value and is therefore horizontal."
+    },
+    {
+      "name": "07-repeat-seasonal-pattern",
+      "width": 960,
+      "height": 245,
+      "title": "Measured history and forecast",
+      "description": "The forecast repeats the hourly observations from the previous day."
+    },
+    {
+      "name": "08-sliding-windows",
+      "width": 960,
+      "height": 215,
+      "title": "One training example from four historical measurements",
+      "description": "Four temperatures were measured at successive hours. The first three are grouped as input; the fourth is the observed target, not a predicted or calculated value."
+    },
+    {
+      "name": "08-learning-from-error",
+      "width": 960,
+      "height": 240,
+      "title": "Prediction error during training",
+      "description": "An illustrative model predicts 14 degrees from inputs 12, 13, and 15. The observed target is 16, so the prediction is two degrees too low. Training uses such errors across examples to adjust parameters."
+    },
+    {
+      "name": "09-under-and-overfitting",
+      "width": 960,
+      "height": 460,
+      "title": "Underfitting and overfitting",
+      "description": "Three models fitted to the same twelve invented points. The straight line misses the shape, the smooth curve follows it, and the flexible curve passes through every point but departs from the true curve between them."
+    },
+    {
+      "name": "10-linear-lag-model",
+      "width": 960,
+      "height": 480,
+      "title": "Linear lag regression as a weighted sum",
+      "description": "Four recent values are multiplied by learned weights, summed, and shifted by a bias. The most recent value has the largest weight. The result is the forecast for the next step."
+    },
+    {
+      "name": "11-trees-and-boosting",
+      "width": 960,
+      "height": 410,
+      "title": "Decision trees and gradient boosting",
+      "description": "A decision tree asks yes-or-no questions about temperature, hour, and wind and ends in leaves with predicted changes. Gradient boosting adds many small trees, each fitted to the remaining errors."
+    },
+    {
+      "name": "12-recurrent-memory",
+      "width": 960,
+      "height": 370,
+      "title": "A recurrent network with memory",
+      "description": "Five observations are read one after another by the same cell. A hidden state passes from step to step as a memory, and the last state produces the forecast of the next value."
+    },
+    {
+      "name": "13-patches-and-attention",
+      "width": 960,
+      "height": 470,
+      "title": "Patches and attention",
+      "description": "An invented series is cut into six daily patches. Each patch becomes a token. Arcs from the last token show attention weights; the strongest link goes to the previous day."
+    },
+    {
+      "name": "14-pretrained-zero-shot",
+      "width": 960,
+      "height": 370,
+      "title": "Zero-shot forecasting with a pretrained model",
+      "description": "Many small series of different shapes represent the pretraining collection. The pretrained model then receives the history of a new series and forecasts its continuation without further training."
+    }
+  ],
+  "numericalData": {
+    "x30": 3.7860248457222285,
+    "acf": {
+      "lag1": 0.921527108451008,
+      "lag12": -0.7343028632461258,
+      "lag24": 0.700133504811686,
+      "lag48": 0.6578972787242606
+    },
+    "baselines": {
+      "maeNaive": 2.7710743588590425,
+      "maeSeasonal": 0.5446027456589176
+    },
+    "fit": {
+      "trainMse": {
+        "simple": 0.28616730751118313,
+        "suitable": 0.03080019244339835,
+        "flexible": 0
+      },
+      "truthMse": {
+        "simple": 0.18689245621696912,
+        "suitable": 0.009337140076250808,
+        "flexible": 0.2012497402138064
+      }
+    },
+    "linear": {
+      "yhat": 9.45
+    }
+  }
+}
