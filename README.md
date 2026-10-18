@@ -20,6 +20,8 @@ Die Grundlagen in `main.typ` folgen der Reihenfolge **Zeitreihen → etablierte 
 
 **Überarbeitete Grundlagen, Stand 18. Oktober 2026:** Die Abschnitte 2.1 und 2.2 erklären Zeitreihen, Prognosemuster, Lernen aus Beispielen und ausgewählte Vergleichsverfahren in einfachem Englisch. Durchgehende Temperaturbeispiele und eigene SVG-Grafiken verbinden die Abschnitte. 2.2.5 unterscheidet die Herkunft der Trainingsdaten von den aktuellen Eingabewerten. Die Texte liegen in `chapters/`; Aufbau und Erzeugung der Grafiken sind in [figures/forecasting/README.md](figures/forecasting/README.md) dokumentiert.
 
+**Tensor-Motivation (2.3):** [chapters/tensor-forecasting-motivation.typ](chapters/tensor-forecasting-motivation.typ) verbindet die Prognoseverfahren mit expliziten Wechselwirkungen und geteilten Faktoren. Zwei konstruierte Zahlenbeispiele erklären die Ideen vor der Tensor-Mathematik; Originalarbeiten von Yu et al., Novikov et al. und Shi et al. begründen die Motivation. Genauigkeitsvorteile bleiben prüfbare Hypothesen.
+
 Die Grafiken und Prüfungen benötigen Node.js ohne zusätzliche Pakete:
 
     node scripts/build-tensor-figures.mjs

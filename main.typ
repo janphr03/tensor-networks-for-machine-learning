@@ -194,42 +194,7 @@ methodology (@evaluation-foundations) and in the review of published evidence
 
 #include "chapters/established-forecasting-methods.typ"
 
-== Motivation for Tensor-Based Forecasting <tensor-motivation>
-
-@forecasting-ml-foundations ended with models that are either simple but
-limited or powerful but large and hungry for data. Tensor methods aim between
-these extremes. Instead of adding parameters, they look for a few patterns that
-are shared across variables and time and build the model from them. This
-section states, as testable hypotheses, why this could make forecasts more
-accurate or cheaper, and when it should fail.
-
-#placeholder[
-  Connect the requirements of forecasting to the tensor-based approach before
-  introducing its formal mathematics. Distinguish tensors as data objects from
-  tensor decompositions and tensor-network prediction models.
-]
-
-=== Modeling Higher-Order and Cross-Variable Dependencies
-#placeholder[
-  Explain why interactions among past states or several variables may matter,
-  and how explicit multiplicative interactions provide one possible modeling
-  choice. Motivate tensor representations using higher-order recurrent models.
-  Ordinary neural networks also use tensors; the proposed contribution must
-  identify the specific factorization or network structure.
-  Starting reference: #cite(<yu2019>).
-]
-
-=== Structured Representations and Accuracy Hypotheses
-#placeholder[
-  Motivate low-rank structure as a way to constrain the learned representation
-  and potentially improve generalization. Introduce modeling interactions,
-  regularization, and compact representations as related motivations.
-  Compression alone does not establish improved forecasting accuracy. State
-  testable hypotheses and expected failure cases rather than assuming that
-  tensor-based models are superior.
-  Starting references: #cite(<novikov2015>), #cite(<yu2019>), and
-  #cite(<shi2020>).
-]
+#include "chapters/tensor-forecasting-motivation.typ"
 
 #include "chapters/tensor-mathematical-foundations.typ"
 
