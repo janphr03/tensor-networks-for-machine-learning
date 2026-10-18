@@ -251,10 +251,17 @@ comes from: only the chosen training data, or a larger pretraining collection.
 
 === Where Does a Model's Training Experience Come From? <ml-pretrained>
 
-Two models can receive the same recent temperatures, 12, 13, and 15 °C,
-but have learned from different data. The recent readings tell each model
-what is happening now; its trained parameters reflect what it learned before.
-The question is therefore: *which data were used to learn those parameters?*
+A model trained only on our task's data can learn only from the examples
+available there. If that training set is small, it may contain few examples
+of useful relationships. Yet similar relationships, such as recurring
+seasonal behaviour, may also occur in other time series. This raises a
+practical question: *must we learn everything anew for each forecasting task,
+or can we reuse something learned from other series?* Pretraining explores
+the second possibility @ansari2024.
+
+The two routes below show the difference. Both models receive the same
+recent temperatures, 12, 13, and 15 °C, when making a forecast. What differs
+is the data used to learn their parameters before that forecast is made.
 
 #block(breakable: false)[
 #block(inset: (top: 6pt, bottom: 6pt))[
@@ -277,12 +284,14 @@ Its training experience comes from that task's training data
 #block(inset: (top: 6pt, bottom: 6pt))[
   #text(size: 12.5pt, weight: "bold", fill: blue)[Experience gained from other time series]
 ]
-Another option is to reuse a model already trained on a broad collection
-of other time series. This earlier training is called *pretraining*.
-In *zero-shot forecasting*, we give that model the same recent readings
-and obtain a forecast without updating its parameters for our task
-(@fig-ml-pretrained) @ansari2024. It therefore uses our observed history
-as input, but brings its training experience from elsewhere.
+Instead of starting from an untrained model, we can reuse parameters learned
+from many other series. This earlier learning is called *pretraining*.
+The motivation is that some learned relationships may also help with our
+series, reducing the need to learn them solely from our own training data.
+In *zero-shot forecasting*, we give the pretrained model our recent readings
+and obtain a forecast without updating its parameters for this task
+(@fig-ml-pretrained) @ansari2024. The recent readings describe the current
+situation; the pretrained parameters supply previously learned relationships.
 
 #figure(
   image("../figures/forecasting/14-simple-pretraining.svg", width: 100%,
@@ -296,10 +305,7 @@ this is *fine-tuning* @ansari2024. Broadly pretrained models intended for reuse
 across time-series tasks are often called *time-series foundation models*;
 this describes training and reuse, rather than a separate architecture.
 
-For this study, pretrained models are relevant as possible competitors to the
-tensor-based models. Both receive the available history of the series being
-forecast, but a pretrained model also uses parameters learned from other
-series. We compare their accuracy on the same forecasting task and state
-which training data each model has used. If a pretrained model performs
-better, that result alone does not show that pretraining caused the advantage:
-the models may also differ in architecture, size, and training procedure.
+This makes pretrained models relevant competitors for our tensor-based
+models: they can use training experience beyond our task's dataset.
+Whether that experience transfers usefully to our task must be measured;
+it does not guarantee better forecasts.
