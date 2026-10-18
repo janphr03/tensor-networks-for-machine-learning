@@ -295,5 +295,11 @@ A pretrained model can be further trained on our task's training data;
 this is *fine-tuning* @ansari2024. Broadly pretrained models intended for reuse
 across time-series tasks are often called *time-series foundation models*;
 this describes training and reuse, rather than a separate architecture.
-Our comparison tests whether experience from other series improves forecasts
-on our task, rather than assuming that pretraining is better.
+
+For this study, pretrained models are relevant as possible competitors to the
+tensor-based models. Both receive the available history of the series being
+forecast, but a pretrained model also uses parameters learned from other
+series. We compare their accuracy on the same forecasting task and state
+which training data each model has used. If a pretrained model performs
+better, that result alone does not show that pretraining caused the advantage:
+the models may also differ in architecture, size, and training procedure.
