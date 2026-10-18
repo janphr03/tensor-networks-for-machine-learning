@@ -58,12 +58,12 @@ weights are chosen for explanation, not computed by a fitted model; visual
 shape matching is not a definition of attention. The diagram is not a complete
 Transformer architecture.
 
-Section 2.2.5 uses `14-task-training.svg` and `14-simple-pretraining.svg` from
-the same script. Each follows its own explanatory paragraph. Both diagrams
-use the same current observations but show different sources of trained
-parameters: task-specific training data versus other series. Zero-shot use
-does not update parameters on the new task; fine-tuning is explained briefly
-after the contrast.
+Section 2.2.5 uses one comparison, `14-training-starting-points.svg`, from
+the same script. It contrasts the same neural network with random initial
+weights and with weights learned by pretraining on three schematic datasets.
+All numbers and curves are illustrative, not results of a training run.
+The former separate diagrams `14-task-training.svg` and
+`14-simple-pretraining.svg` are retained as legacy assets and are not embedded.
 
 ## Build
 

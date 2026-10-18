@@ -251,61 +251,44 @@ comes from: only the chosen training data, or a larger pretraining collection.
 
 === Where Does a Model's Training Experience Come From? <ml-pretrained>
 
-A model trained only on our task's data can learn only from the examples
-available there. If that training set is small, it may contain few examples
-of useful relationships. Yet similar relationships, such as recurring
-seasonal behaviour, may also occur in other time series. This raises a
-practical question: *must we learn everything anew for each forecasting task,
-or can we reuse something learned from other series?* Pretraining explores
-the second possibility @ansari2024.
+Must a model learn everything from our training data, or can it reuse
+relationships learned from other series? This matters when our dataset
+contains few training examples. Pretraining offers a way to bring prior
+training experience to a new forecasting task @ansari2024.
 
-The two routes below show the difference. Both models receive the same
-recent temperatures, 12, 13, and 15 °C, when making a forecast. What differs
-is the data used to learn their parameters before that forecast is made.
-
-#block(breakable: false)[
 #block(inset: (top: 6pt, bottom: 6pt))[
-  #text(size: 12.5pt, weight: "bold", fill: blue)[Experience from the task's own training data]
+  #text(size: 12.5pt, weight: "bold", fill: blue)[Starting without learned weights]
 ]
-One option is to start with an untrained model and fit its parameters using
-the historical training data for our task. After training, it receives the
-recent readings and predicts the next value (@fig-ml-task-training).
-Its training experience comes from that task's training data
-@goodfellow2016[Ch. 5].
+An *untrained neural network* already has a chosen architecture, but its
+weights have not yet been fitted to data. They typically begin at random
+initial values @goodfellow2016[Ch. 8]. It has therefore not already learned
+patterns from other datasets. To use this starting point, we train its
+parameters on our task's historical training data.
+
+#block(inset: (top: 6pt, bottom: 6pt))[
+  #text(size: 12.5pt, weight: "bold", fill: blue)[Starting with weights learned from other series]
+]
+A *pretrained model* has already had its weights adjusted through training.
+@fig-ml-pretrained illustrates this with three other time-series datasets.
+The difference is the starting weights: random and not yet learned on the
+left, already fitted to other data on the right. Prior training may provide
+useful relationships, but does not mean that the model contains every
+possible pattern @ansari2024.
 
 #figure(
-  image("../figures/forecasting/14-task-training.svg", width: 100%,
-    alt: "The task's historical training data are used to fit model parameters. After training, current readings 12, 13, and 15 are given to the trained model, which produces a forecast."),
-  caption: [Train for this task, then forecast: the training data determine the fitted parameters; the recent readings provide the current input.],
-) <fig-ml-task-training>
-]
-
-#block(breakable: false)[
-#block(inset: (top: 6pt, bottom: 6pt))[
-  #text(size: 12.5pt, weight: "bold", fill: blue)[Experience gained from other time series]
-]
-Instead of starting from an untrained model, we can reuse parameters learned
-from many other series. This earlier learning is called *pretraining*.
-The motivation is that some learned relationships may also help with our
-series, reducing the need to learn them solely from our own training data.
-In *zero-shot forecasting*, we give the pretrained model our recent readings
-and obtain a forecast without updating its parameters for this task
-(@fig-ml-pretrained) @ansari2024. The recent readings describe the current
-situation; the pretrained parameters supply previously learned relationships.
-
-#figure(
-  image("../figures/forecasting/14-simple-pretraining.svg", width: 100%,
-    alt: "Other time series are used to pretrain model parameters. The same current readings 12, 13, and 15 are then given to the pretrained model, which produces a forecast without parameter updates on this task."),
-  caption: [Pretrain elsewhere, then forecast here: the current input is the same, but the fitted parameters come from other series; zero-shot use leaves them unchanged.],
+  image("../figures/forecasting/14-training-starting-points.svg", width: 100%,
+    alt: "The same small neural network has two starting points. Left: no previous training, with illustrative random weights 0.08, minus 0.21, and 0.13. Right: three time-series datasets A, B, and C feed pretraining, resulting in illustrative learned weights 0.20, 0.30, and 0.50. The left model needs training on our task; the right can be used directly for supported forecasting or further fine-tuned."),
+  caption: [Two starting points for the same network architecture: random initial weights versus weights fitted during pretraining. The three datasets and all weights are schematic, not an actual training run.],
 ) <fig-ml-pretrained>
-]
 
-A pretrained model can be further trained on our task's training data;
-this is *fine-tuning* @ansari2024. Broadly pretrained models intended for reuse
-across time-series tasks are often called *time-series foundation models*;
-this describes training and reuse, rather than a separate architecture.
+For a pretrained forecasting model, there are two possible next steps.
+*Zero-shot forecasting* uses the learned weights unchanged with our series'
+observed history as input. *Fine-tuning* continues training those weights
+on our task's training data @ansari2024. Fine-tuning is therefore an option,
+not a requirement for every new series.
 
-This makes pretrained models relevant competitors for our tensor-based
-models: they can use training experience beyond our task's dataset.
-Whether that experience transfers usefully to our task must be measured;
-it does not guarantee better forecasts.
+The task must still be specified: here it is forecasting future values;
+detecting unusual humidity spikes requires an appropriate detection method.
+Broadly pretrained models intended for reuse are called *time-series foundation
+models*. They offer comparison models with prior training experience;
+whether that experience helps on our data must be evaluated.

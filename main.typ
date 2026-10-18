@@ -89,8 +89,7 @@
   "fig-ml-recurrent": [A recurrent network with memory],
   "fig-ml-feedforward": [A feed-forward network with intermediate units],
   "fig-ml-patches": [Attention: different inputs can emphasize different past intervals],
-  "fig-ml-task-training": [Learning from the task's own training data],
-  "fig-ml-pretrained": [Reusing training experience from other time series],
+  "fig-ml-pretrained": [Random initial weights versus pretrained weights],
 ))
 #figure-list(table, [List of Tables])
 #appendix-list()

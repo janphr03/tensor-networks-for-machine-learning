@@ -84,17 +84,37 @@ function save(name,height,description,body) {
   b+=text(480,586,'Thicker link = greater attention weight (illustrative)',21,C.gray);
   save('13-simple-attention',610,'Attention can select different past information for different input windows',b);
 }
-for (const scenario of [
-  {name:'14-task-training',source:['This task\'s','training data'],model:'Trained model',action:'Train',note:'Parameters fitted on this task\'s training data'},
-  {name:'14-simple-pretraining',source:['Many other','time series'],model:'Pretrained model',action:'Pretrain',note:'Zero-shot: no parameter updates on this task'},
-]) {
-  let b=`<rect x="25" y="35" width="235" height="70" rx="6" fill="${C.pale}" stroke="${C.blue}" stroke-width="2"/>`;
-  b+=text(142,62,scenario.source[0],23,C.blue)+text(142,90,scenario.source[1],23,C.blue);
-  b+=arrow(270,70,385,70)+text(327,48,scenario.action,20);
-  b+=box(395,35,250,70,scenario.model,C.teal)+arrow(655,70,745,70);
-  b+=box(755,35,180,70,'Forecast',C.orange);
-  b+=text(142,184,'Current readings:',22,C.blue);
-  b+=box(25,200,235,48,'12, 13, 15 °C',C.blue);
-  b+=`<path d="M270,224 L520,224 L520,115" fill="none" stroke="${C.gray}" stroke-width="2" marker-end="url(#arrow)"/>`;
-  save(scenario.name,260,'Training experience and current input serve different roles',b);
+{
+  let b='';
+  b+=text(235,30,'No previous training',24,C.ink);
+  b+=text(725,30,'Prior training on other datasets',24,C.teal);
+  b+='<line x1="480" y1="20" x2="480" y2="505" stroke="#D7E0E9" stroke-width="2"/>';
+  const shapes=[[0.1,0.3,0.4,0.7,0.9],[0.2,0.8,0.2,0.8,0.2],[0.8,0.5,0.7,0.3,0.4]];
+  [530,665,800].forEach((x,k)=>{
+    b+=`<rect x="${x}" y="55" width="115" height="95" rx="5" fill="${C.pale}" stroke="${C.blue}" stroke-width="1.5"/>`;
+    b+=text(x+57,82,'Dataset '+['A','B','C'][k],18,C.blue);
+    b+=`<polyline points="${shapes[k].map((v,i)=>`${x+12+i*22},${139-v*40}`).join(' ')}" fill="none" stroke="${C.blue}" stroke-width="2"/>`;
+  });
+  b+=arrow(725,160,725,200,C.gray)+text(825,188,'Pretraining',20,C.teal);
+  b+=text(235,180,'Random initialization',22,C.gray);
+  const networks=[
+    {x:85,color:C.gray,weights:['0.08','−0.21','0.13'],label:'Random weights'},
+    {x:575,color:C.teal,weights:['0.20','0.30','0.50'],label:'Learned weights'},
+  ];
+  networks.forEach(net=>{
+    [235,305,375].forEach(y=>{
+      b+=arrow(net.x+24,y,net.x+245,305,net.color,2);
+    });
+    [235,305,375].forEach((y,i)=>{
+      b+=`<circle cx="${net.x}" cy="${y}" r="19" fill="${C.pale}" stroke="${C.blue}" stroke-width="2"/>`;
+      const labelY=[261,305,349][i];
+      b+=`<rect x="${net.x+36}" y="${labelY-16}" width="148" height="32" rx="4" fill="white"/>`;
+      b+=`<text x="${net.x+110}" y="${labelY+7}" font-size="21" text-anchor="middle" fill="${net.color}">w<tspan baseline-shift="sub" font-size="14">${i+1}</tspan> = ${net.weights[i]}</text>`;
+    });
+    b+=`<circle cx="${net.x+265}" cy="305" r="20" fill="${C.pale}" stroke="${net.color}" stroke-width="2"/>`;
+    b+=text(net.x+145,430,net.label,24,net.color);
+  });
+  b+=text(235,477,'Next: train on our task’s data',21,C.ink);
+  b+=text(725,477,'Next: zero-shot use or fine-tuning',21,C.teal);
+  save('14-training-starting-points',505,'Random initial weights compared with weights learned from three other time-series datasets',b);
 }
