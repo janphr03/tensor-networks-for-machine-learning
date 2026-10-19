@@ -220,26 +220,28 @@ immediately preceding values. *Transformers* use *self-attention* to form
 input-dependent connections between representations of positions in the
 window @vaswani2017.
 
-For a position being updated, attention compares learned representations
-and computes weights for combining their information. @fig-ml-patches
-illustrates the potential benefit: with one current pattern, an older
-interval receives more weight; with a different current pattern, another
-interval receives more weight. The same trained model can therefore mix
-past information differently for different inputs. This differs from the
-linear model above, whose fitted input weights remain fixed during prediction.
+@fig-ml-patches follows one position through self-attention. Each input
+representation supplies a *key* and a *value* through learned transformations;
+the selected position also supplies a *query*. Comparing this query with
+the keys produces scores, which are normalized into weights. These weights
+combine the value vectors into an attention output for the selected position.
+The query, keys, and values come from the *same input window*: this is what
+“self” refers to. The selected position can also attend to itself.
 
 The useful property is *input-dependent access to information across the
-window*, including distant positions. The sketches below illustrate this
-idea; real attention weights are learned from representations, not assigned
-by visually matching curves. Time-position information must also be supplied.
+window*, including distant positions. With the same trained transformations,
+different inputs can produce different attention weights. This differs from
+the linear model above, whose fitted input weights remain fixed during prediction.
+The value vectors combine learned features, rather than simply averaging raw
+temperatures. Time-position information must also be supplied.
 Attention is a component of a Transformer alongside feed-forward layers and
 other operations, and does not guarantee a more accurate forecast
 @vaswani2017.
 
 #figure(
   image("../figures/forecasting/13-simple-attention.svg", width: 100%,
-    alt: "Two schematic windows have the same three earlier patterns but different current patterns. In window A, the current rising pattern has attention weights 0.7, 0.2, and 0.1 over earlier intervals. In window B, the current flat pattern has weights 0.1, 0.2, and 0.7. Thick links mark greater influence; all weights are chosen for illustration."),
-  caption: [Same trained model, different inputs: attention can give different past intervals more influence, including an older interval. Patterns and weights are illustrative, not outputs of a fitted model or explanations of forecast accuracy.],
+    alt: "Three representations h1, h2, and h3 belong to the same input window, derived from readings 12, 13, and 15 degrees Celsius. Position 3 supplies query q3, which is compared with keys k1, k2, and k3. Softmax normalizes the scores into illustrative weights 0.6, 0.1, and 0.3. The weighted value vectors v1, v2, and v3 are summed into attention output z3 for position 3, including information from position 3 itself."),
+  caption: [Self-attention for one selected position: query–key comparisons determine weights for combining value vectors from the same input window. One attention head is shown; the weights are illustrative. The output is a representation, not a temperature forecast.],
 ) <fig-ml-patches>
 ]
 

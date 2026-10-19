@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08",
+  "date": "2026-10-19",
   "status": "passed",
   "checks": [
     {
@@ -149,7 +149,7 @@
       "name": "Generated figure manifest and training data agree with the verified examples",
       "status": "passed",
       "details": {
-        "originalVectorFigures": 11,
+        "originalVectorFigures": 12,
         "externalAssets": 0
       }
     }

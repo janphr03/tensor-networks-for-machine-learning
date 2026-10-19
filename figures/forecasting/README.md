@@ -52,11 +52,14 @@ diagrams from `scripts/build-learning-model-figures.mjs` (included in the full b
 `12-simple-feedforward.svg`, `12-simple-recurrent.svg`, and
 `13-simple-attention.svg`. Each diagram follows its explanation without a
 visible internal title. Weights, tree thresholds, and outputs are illustrative;
-attention is illustrated by two windows with different current patterns,
-showing different weights on the same earlier intervals. The mini-curves and
-weights are chosen for explanation, not computed by a fitted model; visual
-shape matching is not a definition of attention. The diagram is not a complete
-Transformer architecture.
+attention is illustrated by one selected position in a three-position window.
+Its query is compared with all three keys, including its own; softmax normalizes
+the scores into illustrative weights 0.6, 0.1, and 0.3. The weighted value
+vectors are summed into an attention output for the selected position.
+Query, keys, and values are learned projections of representations from the
+same window. The weights are chosen for explanation, not computed by a fitted
+model. The diagram shows one attention head, not a complete Transformer
+architecture or a temperature forecast.
 
 Section 2.2.5 uses one comparison, `14-training-starting-points.svg`, from
 the same script. It contrasts the same neural network with random initial

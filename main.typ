@@ -62,7 +62,8 @@
 #outline(title: [Table of Contents], depth: 3, indent: 1.5em)
 
 #figure-list(image, [List of Figures], short-captions: (
-  "fig-ledger": [A tensor as an indexed ledger],
+  "fig-ledger": [Selecting a measurement by location, day, and variable],
+  "fig-slice-fiber": [Order, slice, and fiber: selecting parts of a tensor],
   "fig-outer": [The outer product as a loom],
   "fig-unfolding": [Unfolding the ledger],
   "fig-contraction": [Contraction as matching lanes],
@@ -88,7 +89,7 @@
   "fig-ml-trees": [Decision trees and gradient boosting],
   "fig-ml-recurrent": [A recurrent network with memory],
   "fig-ml-feedforward": [A feed-forward network with intermediate units],
-  "fig-ml-patches": [Attention: different inputs can emphasize different past intervals],
+  "fig-ml-patches": [Self-attention: compare positions and combine their information],
   "fig-ml-pretrained": [Random initial weights versus pretrained weights],
 ))
 #figure-list(table, [List of Tables])

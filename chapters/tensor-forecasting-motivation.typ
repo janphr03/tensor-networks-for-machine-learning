@@ -17,45 +17,50 @@ sections explain why this could be useful; @tensor-foundations and
 
 === Why Model Interactions Between Inputs?
 
-A forecast may depend on a combination of inputs, rather than on their
-separate contributions alone. An *interaction* means that the effect of
-one input changes with another input. To see this without forecasting
-details, consider the invented response in @tab-interaction-example.
-Here, 0 means that an input is absent and 1 that it is present.
+An *interaction* means that *the effect of B depends on A*. This matters
+for forecasting because adding the separate effects of the inputs can
+then give the wrong prediction.
+
+Suppose we want to forecast electricity use in the next hour, and know
+which of two machines will run. In this invented example, each machine
+uses 1 kWh during that hour. When both run, an additional cooler uses
+another 1 kWh. @tab-interaction-example shows the total.
 
 #figure(
   table(
     columns: 3, align: center, inset: (x: 18pt, y: 4pt),
-    table.header([*Input A*], [*Input B*], [*Illustrative response*]),
-    [0], [0], [0],
-    [1], [0], [1],
-    [0], [1], [1],
-    [1], [1], [3],
+    table.header([*Machine A*], [*Machine B*], [*Use (kWh)*]),
+    [Off], [Off], [0],
+    [On], [Off], [1],
+    [Off], [On], [1],
+    [On], [On], [3],
   ),
-  caption: [A constructed interaction: either input alone gives 1, but their joint presence gives 3 rather than the additive result 2. These are teaching values, not research observations.],
+  caption: [Invented electricity use: when both machines run, the cooler adds 1 kWh.],
 ) <tab-interaction-example>
 
-When B is absent, switching A on raises the response by 1; when B is present,
-the same change raises it by 2. The influence of A therefore depends on B.
-In forecasting, the interacting inputs could be different measured variables
-or observations from different times. *Higher-order interactions* extend
-this idea to combinations of three or more inputs.
+If A is off, switching B on adds 1 kWh. If A is already on, switching B
+on adds 2 kWh: one for B and one for the cooler. *B's effect on total use
+depends on whether A is running.* Simply adding the two machines' separate
+uses would predict 2 kWh instead of 3 kWh when both run.
 
-Explicitly assigning weights to many combinations can require a large
-parameter array. Yu et al. combine interactions of past hidden states in a
-recurrent forecasting model and use a tensor-train factorization to keep its
-parameter representation smaller @yu2019[Secs. 3.1--3.2]. This motivates
-investigating that structure for forecasting. It does not mean that ordinary
-neural networks cannot learn interactions, or that every dataset benefits
-from explicitly modelling them.
+Forecasting models may need to learn such joint effects between variables
+or past observations. With many inputs, there are many possible combinations.
+Giving each combination its own weight can make the model very large.
+Tensor methods can build many weights from a smaller set of learned numbers.
+The same numbers are *reused for different input combinations*. Yu et al. use this idea
+for combinations of past hidden states in a recurrent forecasting model
+@yu2019[Secs. 3.1--3.2]. The next subsection shows how reusing numbers works.
 
-#pagebreak(weak: true)
-=== Why Use Shared Factors Instead of Separate Weights?
+Ordinary neural networks can also learn interactions. Tensor models offer
+a compact way to represent them; whether this improves forecasts must be
+tested on unseen observations.
 
-The second idea is *reuse*: describe many entries through a smaller set of
-shared factors. @tab-shared-weights gives a simple example using a matrix,
-the two-index case of a tensor. Its second row is twice its first, and its
-third row is three times its first.
+=== Why Reuse Numbers to Build Many Weights?
+
+The second idea is to *reuse the same numbers to build many weights*.
+@tab-shared-weights contains twelve weights, but its rows follow a simple
+pattern: the second row is twice the first, and the third row is three
+times the first. We can use this pattern to store fewer numbers.
 
 #figure(
   table(
@@ -68,33 +73,32 @@ third row is three times its first.
   caption: [Shared structure in twelve invented weights: every row is a multiple of the base row.],
 ) <tab-shared-weights>
 
-Instead of storing all twelve weights, we can store the four base values
-and the three row multipliers, 1, 2, and 3: seven numbers reproduce the
-same matrix. Tensor factorizations generalise such ideas to arrays with
-more indices. A *low-rank representation* limits how many components are
-combined; its definition follows in @tensor-foundations. Real model weights
-need not have an exact compact representation, so using few components may
-introduce approximation error.
+We only need two lists: the base row, *2, 4, 6, 8*, and the row multipliers,
+*1, 2, 3*. To recover a weight, multiply a base value by its row multiplier.
+For example, the third weight in the second row is $2 times 6 = 12$.
+Seven stored numbers therefore reproduce all twelve weights.
 
-Novikov et al. demonstrate tensor-train representations of neural-layer
-weights to reduce parameter storage @novikov2015. This supports the
-compression motivation, rather than establishing better forecasting.
-Shi et al. use a different route: they represent multiple time series in a
-structured tensor form, compress it with a Tucker decomposition, and forecast
-in the compressed representation @shi2020. Their reported forecasting
-results concern their particular datasets and comparisons.
+These two lists are called *factors*. They are *shared* because the same
+base row is reused for every row, and each row multiplier is reused for
+all four weights in its row. A *tensor factorization* applies this idea
+to arrays with more indices. The mathematics follows in @tensor-foundations.
+Real weights may not follow such a simple pattern exactly. Using fewer
+numbers can then change some weights and lose information.
 
-For this study, these ideas lead to three testable expectations:
+Novikov et al. use tensor factorizations to store neural-network weights
+with fewer numbers @novikov2015. Shi et al. compress data from several
+time series and make forecasts using the smaller representation @shi2020.
+These studies show ways to use the idea; they do not tell us whether it
+will improve forecasts on our data.
 
-- Explicit interactions may improve accuracy when combinations of inputs
-  contain information that the comparison models do not capture well.
-- A compact representation may improve generalization if its constraints
-  match useful structure; overly strong constraints may discard information
-  and worsen accuracy.
-- Fewer stored parameters may reduce memory requirements. Runtime depends
-  additionally on how the factors are evaluated and on the implementation.
+For this study, this raises three questions:
 
-The main question remains forecasting accuracy on unseen observations.
-Parameter savings alone cannot answer it. The following sections explain
-the tensor operations and network structures needed to implement and assess
-these hypotheses.
+- Does learning joint effects between inputs improve forecasts?
+- Does using fewer learned numbers help the model predict new observations,
+  or does it lose information needed for accurate forecasts?
+- How much memory does this save, and does it also make computation faster?
+
+The main test is whether the forecasts are more accurate on unseen data.
+Using fewer numbers does not automatically make a forecast better.
+The next sections explain how tensor models work so that we can build
+and compare them.

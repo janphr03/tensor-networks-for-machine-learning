@@ -61,52 +61,109 @@ function svg(name, w, h, title, description, body) {
   manifest.push({name, width: w, height: h, title, description});
 }
 
-// A tensor as a book with separately addressable pages, rows, and columns.
+// A spatial stack makes the location index visible as depth.
 {
-  let b = text(35, 35, 'Three coordinates locate one entry', 26, C.ink, 'start', 'bold');
-  for (let s = 0; s < 2; s++) {
-    const x = 65 + s * 420, y = 95;
-    b += curve('M' + (x - 20) + ',' + (y - 10) + ' Q' + (x + 90) + ',' + (y - 30)
-      + ' ' + (x + 230) + ',' + (y - 10) + ' L' + (x + 230) + ',' + (y + 210)
-      + ' Q' + (x + 90) + ',' + (y + 190) + ' ' + (x - 20) + ',' + (y + 210) + ' Z', C.light, 2, C.pale);
-    b += curve('M' + (x - 5) + ',' + (y - 5) + ' Q' + (x + 110) + ',' + (y - 25)
-      + ' ' + (x + 245) + ',' + (y - 5) + ' L' + (x + 245) + ',' + (y + 205)
-      + ' Q' + (x + 110) + ',' + (y + 185) + ' ' + (x - 5) + ',' + (y + 205) + ' Z', C.gray, 1.5, C.white);
-    for (let hole = 0; hole < 3; hole++) {
-      b += curve('M' + (x - 15) + ',' + (y + 35 + 55 * hole) + ' q-22,-16 -25,1 q4,18 24,12', C.gray, 3);
-    }
-    b += text(x + 120, y + 10, 'page s = ' + (s + 1), 21, s === 0 ? C.blue : C.teal, 'middle', 'bold');
-    b += text(x + 100, y + 45, 'v = 1', 18, C.gray, 'middle');
-    b += text(x + 172, y + 45, 'v = 2', 18, C.gray, 'middle');
-    for (let t = 0; t < 3; t++) {
-      b += text(x + 25, y + 80 + t * 42, 't = ' + (t + 1), 18, C.gray);
-      b += line(x + 72, y + 94 + t * 42, x + 205, y + 94 + t * 42, C.light, 1);
-      for (let v = 0; v < 2; v++) {
-        const cx = x + 100 + v * 72, cy = y + 80 + t * 42;
-        if (s === 1 && t === 2 && v === 0) b += circle(cx, cy - 6, 18, '#FBE2D4', C.orange, 2);
-        b += text(cx, cy, ledger[s][t][v], 23, s === 1 && t === 2 && v === 0 ? C.orange : C.ink, 'middle');
-      }
-    }
+  let b=text(35,35,'One table per location: stack the tables to form a tensor',25,C.ink,'start','bold');
+  // Front: location 2. Back: location 1. The grid has 2 × 3 × 2 cells.
+  b+=curve('M200,170 L320,90 L640,90 L520,170 Z',C.gray,2,'#E5F4F1');
+  b+=curve('M520,170 L640,90 L640,330 L520,410 Z',C.gray,2,'#D5E9E6');
+  b+=line(360,170,480,90,C.gray,1.5);
+  b+=line(260,130,580,130,C.gray,1.5);
+  b+=line(580,130,580,370,C.gray,1.5);
+  [250,330].forEach(y=>{b+=line(520,y,640,y-80,C.gray,1.5);});
+  b+=rect(200,170,320,240,C.pale,C.teal,3);
+  b+=rect(201,331,158,78,'#FBE2D4','none');
+  b+=line(360,170,360,410,C.gray,1.5);
+  [250,330].forEach(y=>{b+=line(200,y,520,y,C.gray,1.5);});
+  for(let t=0;t<3;t++) for(let v=0;v<2;v++) {
+    const chosen=t===2&&v===0;
+    b+=text(280+v*160,220+t*80,ledger[1][t][v],chosen?31:25,chosen?C.orange:C.ink,'middle',chosen?'bold':'normal');
   }
-  b += text(460, 345, 'X₂,₃,₁ = 11     ·     shape: 2 series × 3 times × 2 variables', 21, C.ink, 'middle');
-  svg('01-indexed-ledger', 920, 375, 'An indexed ledger', 'Two ledger pages with three time rows and two variable columns; the entry at series two, time three, variable one is eleven.', b);
+  // Separate geometric directions for day, variable, and location.
+  b+=line(145,170,145,425,C.blue,2.5,false,true);
+  b+=text(130,145,'Day (t)',21,C.blue,'end','bold');
+  [210,290,370].forEach((y,i)=>{
+    b+=line(138,y,152,y,C.blue,2);
+    b+=text(125,y+7,'Day '+(i+1),20,C.blue,'end');
+  });
+  b+=line(200,455,535,455,C.gray,2.5,false,true);
+  [280,440].forEach(x=>{b+=line(x,449,x,462,C.gray,2);});
+  b+=text(280,490,'Temperature',20,C.ink,'middle');
+  b+=text(280,516,'v = 1',18,C.gray,'middle');
+  b+=text(440,490,'Humidity',20,C.ink,'middle');
+  b+=text(440,516,'v = 2',18,C.gray,'middle');
+  b+=text(360,551,'Variable (v)',21,C.ink,'middle','bold');
+  b+=line(790,97,650,190,C.teal,2.5,false,true);
+  b+=line(763,99,777,121,C.teal,2);
+  b+=line(643,179,657,201,C.teal,2);
+  b+=text(745,70,'Location (s)',21,C.teal,'start','bold');
+  b+=text(790,140,'1: back layer',20,C.teal);
+  b+=text(670,220,'2: front layer',20,C.teal);
+  b+=text(720,350,'Highlighted cell:',20,C.gray,'middle');
+  b+=text(720,385,'11 °C',30,C.orange,'middle','bold');
+  b+=text(720,421,'Location 2',20,C.ink,'middle');
+  b+=text(720,449,'Day 3',20,C.ink,'middle');
+  b+=text(720,477,'Temperature',20,C.ink,'middle');
+  b+=text(460,601,'X₂,₃,₁ = 11     ·     2 locations × 3 days × 2 variables',22,C.ink,'middle');
+  svg('01-indexed-ledger',920,625,'A tensor as a stack of location tables','A three-dimensional two-by-three-by-two block has location as depth, day as height, and variable as width. Its front layer, location two, displays readings seven to twelve. The orange cell is temperature on day three at location two, eleven degrees Celsius. Separate arrows identify all three index directions. Values are invented.',b);
+}
+
+// Holding indices fixed selects a slice and then a fiber from the same data.
+{
+  let b='';
+  [['Tensor',150,'Order 3'],['Slice',475,'Order 2'],['Fiber',800,'Order 1']].forEach(([name,x,order])=>{
+    b+=text(x,30,name,25,C.ink,'middle','bold');
+    b+=text(x,62,order,21,C.gray,'middle');
+  });
+  b+=curve('M50,110 L95,80 L255,80 L210,110 Z',C.gray,1.5,'#E5F4F1');
+  b+=curve('M210,110 L255,80 L255,224 L210,254 Z',C.gray,1.5,'#D5E9E6');
+  b+=line(130,110,175,80,C.gray,1);
+  b+=line(72.5,95,232.5,95,C.gray,1);
+  b+=line(232.5,95,232.5,239,C.gray,1);
+  [158,206].forEach(y=>{b+=line(210,y,255,y-30,C.gray,1);});
+  const slice=ledger[1];
+  slice.forEach((row,t)=>row.forEach((value,v)=>{
+    b+=rect(50+v*80,110+t*48,80,48,'#E5F4F1',C.gray,1);
+    b+=text(90+v*80,141+t*48,value,21,C.ink,'middle');
+    b+=rect(395+v*80,110+t*48,80,48,v===0?'#FBE2D4':C.pale,C.white,2);
+    b+=text(435+v*80,141+t*48,value,21,v===0?C.orange:C.ink,'middle');
+  }));
+  b+=rect(50,110,160,144,'none',C.teal,2.5);
+  b+=rect(395,110,160,144,'none',C.teal,2.5);
+  b+=line(275,182,365,182,C.gray,2.5,false,true);
+  b+=text(320,125,'Fix location 2',18,C.teal,'middle');
+  b+=line(585,182,700,182,C.gray,2.5,false,true);
+  b+=text(640,125,'Fix temperature',18,C.orange,'middle');
+  slice.forEach((row,t)=>{
+    b+=rect(765,110+t*48,70,48,'#FBE2D4',C.white,2);
+    b+=text(800,141+t*48,row[0],21,C.orange,'middle');
+    b+=text(750,140+t*48,'Day '+(t+1),17,C.gray,'end');
+  });
+  b+=rect(765,110,70,144,'none',C.orange,2.5);
+  b+=text(150,286,'2 × 3 × 2',22,C.ink,'middle');
+  b+=text(475,286,'3 × 2',22,C.ink,'middle');
+  b+=text(800,286,'3',22,C.ink,'middle');
+  b+=text(150,327,'Free: location, day, variable',18,C.gray,'middle');
+  b+=text(475,327,'Free: day, variable',18,C.gray,'middle');
+  b+=text(800,327,'Free: day',18,C.gray,'middle');
+  svg('01b-order-slice-fiber',920,350,'From tensor to slice to fiber','The original tensor has order three and shape two by three by two. Fixing location two selects a three-by-two matrix slice containing rows seven-eight, nine-ten, and eleven-twelve. Fixing temperature as well selects the day fiber seven, nine, eleven, which has order one. The remaining free indices are listed below each view.',b);
 }
 
 // Unfolding changes the address, not the recorded values.
 {
   let b = text(30, 35, 'Change the address; keep every value', 26, C.ink, 'start', 'bold');
-  b += text(140, 85, 'two pages', 20, C.gray, 'middle');
+  b += text(140, 65, 'two locations', 20, C.gray, 'middle');
   b += matrix(ledger[1], 105, 110, 42, true, [2, 0]);
   b += matrix(ledger[0], 70, 85, 42, true);
   b += line(230, 165, 350, 165, C.gray, 3, false, true);
   b += text(290, 140, 'unfold', 18, C.gray, 'middle');
   b += matrix(ledger.map(page => page.flat()), 395, 105, 62, true, [1, 4]);
-  b += text(580, 85, 'one row per series', 20, C.gray, 'middle');
+  b += text(580, 85, 'one row per location', 20, C.gray, 'middle');
   const labels = ['(1,1)', '(1,2)', '(2,1)', '(2,2)', '(3,1)', '(3,2)'];
   labels.forEach((label, j) => { b += text(426 + j * 62, 258, label, 17, C.gray, 'middle'); });
-  b += text(580, 290, 'column address: (time, variable)', 20, C.gray, 'middle');
+  b += text(580, 290, 'column address: (day, variable)', 20, C.gray, 'middle');
   b += text(460, 337, '2 × 3 × 2 entries  →  2 × 6 entries     ·     twelve values in both views', 21, C.ink, 'middle');
-  svg('02-unfolding-pages', 920, 370, 'Unfolding the ledger', 'A three-way tensor is unfolded into a two-by-six matrix with explicitly ordered column pairs. The value eleven moves to row two, column five.', b);
+  svg('02-unfolding-pages', 920, 370, 'Unfolding the location tables', 'A three-way tensor is unfolded into a two-by-six matrix with one row per location and explicitly ordered day-variable column pairs. The value eleven moves to row two, column five.', b);
 }
 
 // Outer products: all crossings are retained; no crossings are added together.

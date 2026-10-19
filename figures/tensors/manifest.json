@@ -3,16 +3,23 @@
     {
       "name": "01-indexed-ledger",
       "width": 920,
-      "height": 375,
-      "title": "An indexed ledger",
-      "description": "Two ledger pages with three time rows and two variable columns; the entry at series two, time three, variable one is eleven."
+      "height": 625,
+      "title": "A tensor as a stack of location tables",
+      "description": "A three-dimensional two-by-three-by-two block has location as depth, day as height, and variable as width. Its front layer, location two, displays readings seven to twelve. The orange cell is temperature on day three at location two, eleven degrees Celsius. Separate arrows identify all three index directions. Values are invented."
+    },
+    {
+      "name": "01b-order-slice-fiber",
+      "width": 920,
+      "height": 350,
+      "title": "From tensor to slice to fiber",
+      "description": "The original tensor has order three and shape two by three by two. Fixing location two selects a three-by-two matrix slice containing rows seven-eight, nine-ten, and eleven-twelve. Fixing temperature as well selects the day fiber seven, nine, eleven, which has order one. The remaining free indices are listed below each view."
     },
     {
       "name": "02-unfolding-pages",
       "width": 920,
       "height": 370,
-      "title": "Unfolding the ledger",
-      "description": "A three-way tensor is unfolded into a two-by-six matrix with explicitly ordered column pairs. The value eleven moves to row two, column five."
+      "title": "Unfolding the location tables",
+      "description": "A three-way tensor is unfolded into a two-by-six matrix with one row per location and explicitly ordered day-variable column pairs. The value eleven moves to row two, column five."
     },
     {
       "name": "03-outer-product-loom",

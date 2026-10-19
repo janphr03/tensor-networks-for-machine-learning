@@ -1,12 +1,13 @@
 # Original vector illustrations for tensor-network foundations
 
-The eleven SVGs are original teaching illustrations for Sections 2.4–2.6. They
+The twelve SVGs are original teaching illustrations for Sections 2.4–2.6. They
 contain vector paths and text, and remain sharp when enlarged or printed. Each
 metaphor is connected to a formula or a numerical example in the chapter.
 
 | File | Teaching idea | Mathematical anchor |
 | --- | --- | --- |
-| 01-indexed-ledger.svg | A ledger with pages, rows, and columns | An order-three tensor; entry X(2,3,1) = 11 |
+| 01-indexed-ledger.svg | A three-dimensional stack: locations in depth, days vertically, variables horizontally | An order-three tensor; temperature X(2,3,1) = 11 °C |
+| 01b-order-slice-fiber.svg | Select a location, then a variable; three free indices become two, then one | Orders 3, 2, 1; slice at location 2; temperature fiber (7, 9, 11) |
 | 02-unfolding-pages.svg | Change the address without losing a value | Reversible 2 × 3 × 2 to 2 × 6 unfolding |
 | 03-outer-product-loom.svg | Keep every crossing of two sets of threads | Outer product with six retained entries |
 | 04-contraction-lanes.svg | Match addresses and collect signed contributions | Dot product 4 − 2 + 6 = 8 |

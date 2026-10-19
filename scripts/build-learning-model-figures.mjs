@@ -55,34 +55,46 @@ function save(name,height,description,body) {
   save('12-simple-recurrent',255,'The same recurrent unit updates a state across three readings',b);
 }
 {
-  let b='';
-  const xs=[40,265,490,745], w=170;
-  const shapes=[[0.1,0.25,0.45,0.7,0.9],[0.9,0.7,0.5,0.3,0.1],[0.5,0.5,0.5,0.5,0.5]];
-  const windows=[
-    {y:120,caption:'Window A',current:0,weights:[0.7,0.2,0.1]},
-    {y:385,caption:'Window B: different current input',current:2,weights:[0.1,0.2,0.7]},
-  ];
-  windows.forEach(row=>{
-    b+=text(225,row.y-95,row.caption,22,C.ink);
-    row.weights.forEach((weight,i)=>{
-      const start=xs[3]+w/2, end=xs[i]+w/2;
-      const lift=[90,65,42][i];
-      b+=`<path d="M${start},${row.y} C${start},${row.y-lift} ${end},${row.y-lift} ${end},${row.y}" fill="none" stroke="${weight>0.5?C.teal:'#AAB8C5'}" stroke-width="${1+weight*7}" marker-end="url(#arrow)"/>`;
-    });
-    xs.forEach((x,i)=>{
-      const selected=i===3||row.weights[i]>0.5;
-      const color=selected?C.teal:C.blue;
-      b+=`<rect x="${x}" y="${row.y}" width="${w}" height="95" rx="6" fill="${C.pale}" stroke="${color}" stroke-width="2"/>`;
-      b+=text(x+w/2,row.y+26,i===3?'Current pattern':'Earlier interval '+(i+1),19,color);
-      const shape=shapes[i===3?row.current:i];
-      const pts=shape.map((v,j)=>`${x+22+j*31},${row.y+80-v*35}`).join(' ');
-      b+=`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="3"/>`;
-      b+=text(x+w/2,row.y+125,i===3?'Position being updated':'Weight: '+row.weights[i].toFixed(1),19,color);
-    });
+  // Show one attention head at position 3, including its own key and value.
+  // Q, K and V are learned projections of the same input representations.
+  const subs=['₁','₂','₃'], weights=[0.6,0.1,0.3], xs=[60,370,680];
+  let b=text(480,28,'1  Start with representations from the same input window',24);
+  b+='<rect x="25" y="46" width="910" height="132" rx="10" fill="none" stroke="#AAB8C5" stroke-width="2" stroke-dasharray="7 5"/>';
+  xs.forEach((x,i)=>{
+    const color=i===2?C.teal:C.blue;
+    b+=box(x,65,220,70,'',color);
+    b+=text(x+110,91,i===2?'Position 3 (selected)':'Position '+(i+1),18,color);
+    b+=text(x+110,122,'h'+subs[i],25,color);
+    b+=text(x+110,158,'From '+[12,13,15][i]+' °C',19,color);
   });
-  b+=text(480,555,'Different current input → different influence of earlier intervals',23,C.ink);
-  b+=text(480,586,'Thicker link = greater attention weight (illustrative)',21,C.gray);
-  save('13-simple-attention',610,'Attention can select different past information for different input windows',b);
+
+  b+=text(480,218,'2  Compare the selected query with the keys; compute weights',24);
+  b+=text(150,258,'Query from h₃',20,C.teal);
+  b+=box(45,315,210,60,'q₃',C.teal);
+  b+=text(440,252,'Key comparisons',20);
+  b+=text(865,252,'Weights',20);
+  [292,345,398].forEach((y,i)=>{
+    b+=arrow(260,345,335,y,C.teal);
+    b+=box(345,y-21,190,42,'q₃ with k'+subs[i]);
+    b+=arrow(540,y,595,345);
+    b+=arrow(760,345,805,y);
+    b+=box(815,y-21,105,42,weights[i].toFixed(1),C.teal);
+  });
+  b+='<rect x="605" y="302" width="150" height="86" rx="6" fill="#F5F8FB" stroke="#173552" stroke-width="2"/>';
+  b+=text(680,328,'Normalize',21)+text(680,352,'all scores',21)+text(680,376,'(softmax)',19,C.gray);
+  b+=text(480,448,'q₃, k₁–k₃ and v₁–v₃ are learned projections of h₁–h₃.',20,C.gray);
+
+  b+=text(480,493,'3  Weight and combine the values from the same window',24);
+  xs.forEach((x,i)=>{
+    b+=box(x,518,220,55,weights[i].toFixed(1)+' × v'+subs[i],C.blue);
+    b+=arrow(x+110,580,[453,480,507][i],[624,600,624][i],C.blue,1+weights[i]*4);
+  });
+  b+='<circle cx="480" cy="628" r="22" fill="white" stroke="#173552" stroke-width="2"/>';
+  b+=text(480,636,'+',28);
+  b+=arrow(480,655,480,671);
+  b+=box(275,680,410,52,'z₃: combined information',C.teal);
+  b+=text(480,760,'Attention output for position 3; weights are illustrative.',20,C.gray);
+  save('13-simple-attention',780,'Self-attention: a query and keys from one input window determine weights that combine its value vectors',b);
 }
 {
   let b='';
