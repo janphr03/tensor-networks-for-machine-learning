@@ -10,6 +10,44 @@ Der Grafikbestand umfasst damit zwölf SVGs; die numerischen Lehrwerte bleiben
 gleich. Der Tensor selbst hat weiter Ordnung drei, die ausgewählten Teile
 haben Ordnung zwei beziehungsweise eins.
 
+**Überarbeitung von 2.4.2 am 19. Oktober 2026:** Eine kompakte Grafik zeigt
+die Grundreihe (2, 4, 6, 8) und ihre Multiplikatoren (1, 2, 3): sieben
+Faktorwerte ergeben zwölf Gewichte. Jedes Kästchen trägt ein kleines
+Gewichtssymbol für einen gelernten Parameter; die Grafik enthält keine
+Rechenwege. Intern prüft das Skript zusätzlich die Übereinstimmung von
+5 × 12 und 5 × (2 × 6) sowie alle 2 × 2-Minoren der Gewichtstabelle.
+
+Die zusätzliche Mini-Grafik `03b-rank-comparison.svg` vergleicht Rang 1
+mit Rang 2. In der zweiten Matrix wird nur der Eintrag (2,4) von 16 auf
+17 geändert. Ein nicht verschwindender 2 × 2-Minor und die unveränderte
+Beziehung Zeile 3 = 3 × Zeile 1 sichern Rang genau 2. Die Sammlung enthält
+damit dreizehn Grafiken.
+
+**Getrennte Themen in 2.4:** Tensorprodukte und gemeinsame Gewichte stehen
+in 2.4.2. Reshaping und Matricization bilden nun 2.4.3 mit eigener Motivation:
+Eine Zeile pro Ort bereitet beide Orte gemeinsam für Matrixverfahren vor;
+das Umordnen selbst komprimiert keine Daten. Die kompakte Entfaltungsgrafik (920 × 170) zeigt zwei
+Tabellen neben einer Matrix und passt mit dem Text auf dieselbe Seite.
+Rang/SVD folgt direkt in 2.4.4: Wie finden wir die kleinen Faktoren?
+Kontraktion in 2.4.5 beantwortet danach, wie wir direkt mit ihnen rechnen.
+Querverweise verwenden weiterhin die Abschnittslabels.
+
+**Zusammenhängendes Rechenbeispiel:** 2.4.5 verwendet wieder die vier
+Basisgewichte (2, 4, 6, 8) und die drei Multiplikatoren (1, 2, 3).
+Für den Eingang (1, 2, 3, 4) ergibt die gemeinsame gewichtete Summe 60;
+die Ausgaben sind (60, 120, 180). Das Prüffall-Skript vergleicht diese
+Faktorrechnung mit der vollständigen Matrixmultiplikation, zusätzlich für
+drei Eingänge mit Nullen, negativen und nicht ganzzahligen Werten.
+Die Diagrammnotation steht nun beim Einstieg in 2.5.1, unmittelbar vor
+dem ersten verbundenen Faktornetzwerk.
+
+**SVD-Einstieg:** Die Musterfindung wird als beste Annäherung durch eine
+Basiszeile und Zeilenmultiplikatoren erklärt, gefolgt von der Annäherung
+des verbleibenden Rests. Dies beschreibt die SVD mathematisch, ohne einen
+bestimmten numerischen Lösungsalgorithmus vorzuschreiben. Die Grafik
+zeigt nur noch vier kompakte Matrizen (920 × 215); Stärkebalken und
+zusätzliche Beschriftungen entfallen. Zahlen und Farbskala bleiben gleich.
+
 **Nachtrag 17. Oktober 2026:** Der Text der Abschnitte 2.4–2.6 wurde didaktisch gekürzt und beginnt jeweils mit einer kurzen Überleitung. Einige Rechenbeispiele stehen seitdem nicht mehr im Fließtext: die TT-Kerne U, V, W mit T(4,2,3) = 3, das Gauge-Zahlenbeispiel, die Vorhersage 0,636 und die Kerngradienten. Sie bleiben in den Skripten und Abbildungen enthalten und werden weiterhin geprüft. Alle Zahlen, die im Text verblieben sind, stimmen mit den Prüffällen überein.
 
 ## Inhalt und Quellen
@@ -17,7 +55,7 @@ haben Ordnung zwei beziehungsweise eins.
 Der Grundlagenblock besteht aus drei ausformulierten englischen Abschnitten:
 
 1. **Mathematical Foundations:** Tensoren und Indexnotation; Tensorprodukte,
-   Umformen und Entfalten; Kontraktion; Rang, SVD und Approximation.
+   Umformen und Entfalten; Rang, SVD und Approximation; Kontraktion.
 2. **General Principles of Tensor Networks:** Faktorisation; Bindungsdimension
    und Kapazität; CP, Tucker, TT/MPS, MPO und Bäume; Kontraktionsreihenfolge;
    Gauge-Freiheit und kanonische Formen.
@@ -55,7 +93,7 @@ Prüffälle aus. Die vollständigen Resultate stehen in
 | --- | --- | --- |
 | Ledger und Entfaltung | Alle zwölf Werte und Rückzuordnung des Spaltenindex | Bestanden; markierter Wert 11 |
 | Äußeres Produkt | Handwerte und verschwindende 2 × 2-Minoren | Bestanden; Rang 1 |
-| Kontraktion | Vorzeichenbeispiel und direkte Matrixmultiplikation | Bestanden; Summe 8 |
+| Kontraktion | Faktorrechnung gegen vollständige Matrixmultiplikation; zusätzliche Eingänge und Vorzeichenbeispiel | Bestanden; gemeinsame Summe 60, Ausgaben (60, 120, 180) |
 | SVD-Muster | Eigenwerte der Gram-Matrix durch Jacobi-Diagonalisierung | Bestanden; Singularwerte 9, 3, 1 |
 | SVD-Trunkierung | Direkte Frobenius-Abstände der Rekonstruktionen | Bestanden; Fehler √10, 1, 0 |
 | TT-Beispiel | Alle 64 Kontraktionen gegen die explizite Zwei-Term-Summe; Ränge beider Schnitte | Bestanden; Schnittränge 2 und 2 |

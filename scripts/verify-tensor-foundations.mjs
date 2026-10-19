@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {
-  ledger, outer, contributions, patternMatrix, cpFactors, ttExample,
+  ledger, outer, outerU, outerV, rankComparison, contributions, factorCalculation, patternMatrix, cpFactors, ttExample,
   contractionCosts, tensorPrediction, trainingObjective, trainIllustration,
   targetCurve
 } from './tensor-examples.mjs';
@@ -62,15 +62,33 @@ check('Ledger addresses and reversible unfolding',()=>{
   return {tensorShape:[2,3,2],matrixShape:[2,6],highlightedValue:11};
 });
 check('Outer product and rank-one minors',()=>{
-  assert.deepEqual(outer,[[3,4,5],[6,8,10]]);
-  for(let j=0;j<3;j++) for(let k=j+1;k<3;k++)
-    close(outer[0][j]*outer[1][k]-outer[0][k]*outer[1][j],0);
-  return {entries:outer,rank:1};
+  assert.deepEqual(outer,[[2,4,6,8],[4,8,12,16],[6,12,18,24]]);
+  for(let a=0;a<3;a++) for(let b=a+1;b<3;b++)
+    for(let j=0;j<4;j++) for(let k=j+1;k<4;k++)
+      close(outer[a][j]*outer[b][k]-outer[a][k]*outer[b][j],0);
+  const input=5, direct=input*outer[1][2], factored=input*(outerU[1]*outerV[2]);
+  close(direct,60); close(factored,direct);
+  assert.deepEqual(rankComparison.rankOne,outer);
+  const R=rankComparison.rankTwo;
+  // A nonzero minor proves rank >= 2; row three = 3 * row one proves rank <= 2.
+  close(R[0][0]*R[1][3]-R[0][3]*R[1][0],2);
+  R[2].forEach((value,j)=>close(value,3*R[0][j]));
+  return {entries:outer,rank:1,comparisonRank:2,storage:{dense:12,factors:7},weightedExample:{input,direct,factored}};
 });
-check('Signed contraction and matrix contraction',()=>{
+check('Direct factor calculation agrees with full matrix contraction',()=>{
+  const direct=multiply(outer,factorCalculation.input.map(value=>[value])).out.flat();
+  assert.deepEqual(direct,[60,120,180]);
+  assert.deepEqual(factorCalculation.outputs,direct);
+  close(factorCalculation.sharedSum,60);
+  // The same identity must hold for inputs with zeros, signs, and noninteger values.
+  for(const input of [[0,0,0,0],[1,-1,2,-2],[0.5,3,-0.25,1]]) {
+    const reference=multiply(outer,input.map(value=>[value])).out.flat();
+    const sum=outerV.reduce((total,weight,j)=>total+weight*input[j],0);
+    reference.forEach((value,i)=>close(value,outerU[i]*sum));
+  }
   assert.deepEqual(contributions,[4,-2,6]);close(contributions.reduce((a,b)=>a+b,0),8);
   assert.deepEqual(multiply([[1,2,3],[4,5,6]],[[1,0],[0,1],[1,1]]).out,[[4,5],[10,11]]);
-  return {signedSum:8};
+  return {input:factorCalculation.input,sharedSum:factorCalculation.sharedSum,outputs:direct,additionalInputChecks:3,signedSum:8};
 });
 check('SVD spectrum and discarded-layer errors',()=>{
   const M=patternMatrix(),sv=spectrum(M);
@@ -164,8 +182,8 @@ check('The illustrated learning run actually reduces error',()=>{
 });
 check('Generated figure manifest and training data agree with the verified examples',()=>{
   const manifest=JSON.parse(fs.readFileSync(path.join(root,'figures/tensors/manifest.json'),'utf8'));
-  assert.equal(manifest.figures.length,12);
-  assert.equal(new Set(manifest.figures.map(f=>f.name)).size,12);
+  assert.equal(manifest.figures.length,13);
+  assert.equal(new Set(manifest.figures.map(f=>f.name)).size,13);
   for(const fig of manifest.figures) {
     const content=fs.readFileSync(path.join(root,'figures/tensors',fig.name+'.svg'),'utf8');
     assert.ok(content.startsWith('<svg ')&&content.endsWith('</svg>'));
@@ -173,8 +191,10 @@ check('Generated figure manifest and training data agree with the verified examp
     assert.ok(content.includes('<title ')&&content.includes('<desc '));
   }
   assert.deepEqual(manifest.numericalData.ledger,ledger);
+  assert.deepEqual(manifest.numericalData.rankComparison,rankComparison);
+  assert.deepEqual(manifest.numericalData.factorCalculation,factorCalculation);
   close(manifest.numericalData.training.afterMse,trained.afterMse);
-  return {originalVectorFigures:12,externalAssets:0};
+  return {originalVectorFigures:13,externalAssets:0};
 });
 const report={date:'2026-10-19',status:'passed',checks};
 fs.writeFileSync(path.join(root,'figures/tensors/verification.json'),JSON.stringify(report,null,2)+'\n');

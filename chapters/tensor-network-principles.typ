@@ -1,12 +1,21 @@
+#pagebreak(weak: true)
+
 == General Principles of Tensor Networks <tensor-network-foundations>
 
-The previous section compressed a matrix into a few layers. Tensor networks carry
-this idea over to tensors with many indices: a large tensor is assembled from
-small, connected pieces. This section explains how such a network represents a
-tensor, what limits its capacity, which network shapes exist, and how a network
-is evaluated efficiently.
+We can now find small factors for a matrix and calculate with them directly.
+For tensors with more indices, we use several connected factors. Such a
+representation is called a *tensor network*. This section explains how
+the factors connect, how much they can represent, and how to calculate
+with them efficiently.
 
 === Tensor Networks as Factorized Representations
+
+With several factors, a diagram helps us see which indices are summed
+over. A node represents a tensor, and each line attached to it, called a
+*leg*, represents one index. Connecting two legs means multiplying matching
+entries and summing over that shared index: a contraction. An unconnected,
+or *open*, leg remains an index of the result
+#cite(<bridgeman2017>, supplement: [Secs. 1.1–1.3]).
 
 A matrix factorization $M_(i j) = sum_alpha A_(i alpha) B_(alpha j)$ is already
 a tiny network: two factors share an internal index $alpha$. With three outer

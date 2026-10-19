@@ -17,30 +17,37 @@
     {
       "name": "02-unfolding-pages",
       "width": 920,
-      "height": 370,
-      "title": "Unfolding the location tables",
-      "description": "A three-way tensor is unfolded into a two-by-six matrix with one row per location and explicitly ordered day-variable column pairs. The value eleven moves to row two, column five."
+      "height": 170,
+      "title": "Each location table becomes one matrix row",
+      "description": "Two small three-by-two location tables stand side by side on the left. One arrow leads to a two-by-six matrix on the right. Blue location one becomes the first row, containing one through six. Teal location two becomes the second row, containing seven through twelve. Eleven stays highlighted orange in both views. All twelve values are preserved."
     },
     {
       "name": "03-outer-product-loom",
       "width": 920,
-      "height": 400,
-      "title": "The outer product as a loom",
-      "description": "Two blue row threads and three teal column threads form six crossings, containing three, four, five, six, eight, and ten. No summation occurs."
+      "height": 270,
+      "title": "Twelve weight symbols versus seven, with one matching factor pair highlighted",
+      "description": "Each box contains a numeric weight value and a small physical-weight symbol marking a learned parameter. Left: twelve separate weights in a three-by-four table, with the weight twelve highlighted orange. Right: three multiplier weights u and four shared weights v, seven parameters total. The matching factors two and six are highlighted orange. Only counts and the labels u and v appear; there are no explanatory sentences or calculation steps."
+    },
+    {
+      "name": "03b-rank-comparison",
+      "width": 920,
+      "height": 245,
+      "title": "One base row or two: matrix ranks one and two",
+      "description": "Two three-by-four matrices are compared. Left: all rows follow one blue base row, so the rank is one. Right: changing the second row last entry from 16 to 17 requires a second base row. Its unchanged values 4,8,12 are muted red; the changed 17 is strongly highlighted in red. The third row is still three times the first, so two base rows suffice and the rank is exactly two."
     },
     {
       "name": "04-contraction-lanes",
-      "width": 960,
-      "height": 410,
-      "title": "Contraction as matching lanes",
-      "description": "Three lanes show products four, minus two, and six. They merge to the scalar eight. The orange lane is a negative algebraic contribution, not a negative amount of physical material."
+      "width": 920,
+      "height": 250,
+      "title": "Calculating directly with seven factors",
+      "description": "Four inputs one, two, three, four are paired with the shared weights two, four, six, eight. Multiplying the pairs and adding produces the shared sum sixty. Multipliers one, two, three turn that sum into outputs sixty, one hundred twenty, one hundred eighty. No full weight matrix is built."
     },
     {
       "name": "05-svd-pattern-layers",
-      "width": 960,
-      "height": 545,
-      "title": "SVD as layers of a pattern",
-      "description": "Four eight-by-eight heatmaps show an original rank-three matrix and its rank-one, rank-two and rank-three SVD reconstructions. The singular values are nine, three and one."
+      "width": 920,
+      "height": 215,
+      "title": "Reconstruction with one, two, or three SVD patterns",
+      "description": "Four compact eight-by-eight heatmaps show an original rank-three matrix and the sums of its first one, two, or three SVD patterns. All panels use the same color scale. Three patterns reproduce the original exactly. The singular values are nine, three and one."
     },
     {
       "name": "06-latent-relay",
@@ -118,21 +125,85 @@
     ],
     "outer": [
       [
-        3,
+        2,
         4,
-        5
+        6,
+        8
+      ],
+      [
+        4,
+        8,
+        12,
+        16
       ],
       [
         6,
-        8,
-        10
+        12,
+        18,
+        24
       ]
     ],
+    "rankComparison": {
+      "rankOne": [
+        [
+          2,
+          4,
+          6,
+          8
+        ],
+        [
+          4,
+          8,
+          12,
+          16
+        ],
+        [
+          6,
+          12,
+          18,
+          24
+        ]
+      ],
+      "rankTwo": [
+        [
+          2,
+          4,
+          6,
+          8
+        ],
+        [
+          4,
+          8,
+          12,
+          17
+        ],
+        [
+          6,
+          12,
+          18,
+          24
+        ]
+      ]
+    },
     "contributions": [
       4,
       -2,
       6
     ],
+    "factorCalculation": {
+      "input": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "sharedSum": 60,
+      "outputs": [
+        60,
+        120,
+        180
+      ]
+    },
     "contractionCosts": {
       "left": {
         "intermediate": [

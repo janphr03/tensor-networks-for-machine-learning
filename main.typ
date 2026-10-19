@@ -64,9 +64,10 @@
 #figure-list(image, [List of Figures], short-captions: (
   "fig-ledger": [Selecting a measurement by location, day, and variable],
   "fig-slice-fiber": [Order, slice, and fiber: selecting parts of a tensor],
-  "fig-outer": [The outer product as a loom],
-  "fig-unfolding": [Unfolding the ledger],
-  "fig-contraction": [Contraction as matching lanes],
+  "fig-outer": [One shared row: seven parameters describe twelve weights],
+  "fig-rank-comparison": [Matrix rank: one base row or two],
+  "fig-unfolding": [Each location table becomes one matrix row],
+  "fig-contraction": [Calculating with the seven factors directly],
   "fig-svd": [SVD as layers of a pattern],
   "fig-relay": [Latent choices across a tensor train],
   "fig-topologies": [Tensor decomposition families and network topologies],

@@ -1,12 +1,23 @@
 // Numerical examples shared by the vector figures. No external dependencies.
 export const ledger = Array.from({length: 2}, (_, s) =>
   Array.from({length: 3}, (_, t) => [6 * s + 2 * t + 1, 6 * s + 2 * t + 2]));
-export const outerU = [1, 2];
-export const outerV = [3, 4, 5];
+export const outerU = [1, 2, 3];
+export const outerV = [2, 4, 6, 8];
 export const dotA = [1, 2, 3];
 export const dotB = [4, -1, 2];
 export const outer = outerU.map(u => outerV.map(v => u * v));
+export const rankComparison = {
+  rankOne: outer,
+  rankTwo: [[2,4,6,8],[4,8,12,17],[6,12,18,24]],
+};
 export const contributions = dotA.map((a, k) => a * dotB[k]);
+const factorInput = [1, 2, 3, 4];
+const factorSum = outerV.reduce((sum, weight, j) => sum + weight * factorInput[j], 0);
+export const factorCalculation = {
+  input: factorInput,
+  sharedSum: factorSum,
+  outputs: outerU.map(multiplier => multiplier * factorSum),
+};
 
 export function patternMatrix(r = 3) {
   const n = 8;

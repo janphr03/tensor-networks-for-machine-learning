@@ -2,7 +2,7 @@
 # Typst: erzeugte Dokumente und Build-Ausgaben
 # ------------------------------------------------------------
 # Gezielte Regeln: Literatur- und Abbildungs-PDFs bleiben versionierbar.
-/thesis.pdf
+#/thesis.pdf
 /tensor-foundations.pdf
 /studienarbeit.pdf
 /main.pdf

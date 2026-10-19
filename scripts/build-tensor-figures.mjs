@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildNetworkFigures} from './tensor-figure-scenes.mjs';
 import {
-  ledger, outer, outerU, outerV, contributions, dotA, dotB,
+  ledger, outer, outerU, outerV, rankComparison, contributions, factorCalculation,
   patternMatrix, contractionCosts, trainIllustration, trainingData
 } from './tensor-examples.mjs';
 
@@ -151,61 +151,109 @@ function svg(name, w, h, title, description, body) {
 
 // Unfolding changes the address, not the recorded values.
 {
-  let b = text(30, 35, 'Change the address; keep every value', 26, C.ink, 'start', 'bold');
-  b += text(140, 65, 'two locations', 20, C.gray, 'middle');
-  b += matrix(ledger[1], 105, 110, 42, true, [2, 0]);
-  b += matrix(ledger[0], 70, 85, 42, true);
-  b += line(230, 165, 350, 165, C.gray, 3, false, true);
-  b += text(290, 140, 'unfold', 18, C.gray, 'middle');
-  b += matrix(ledger.map(page => page.flat()), 395, 105, 62, true, [1, 4]);
-  b += text(580, 85, 'one row per location', 20, C.gray, 'middle');
-  const labels = ['(1,1)', '(1,2)', '(2,1)', '(2,2)', '(3,1)', '(3,2)'];
-  labels.forEach((label, j) => { b += text(426 + j * 62, 258, label, 17, C.gray, 'middle'); });
-  b += text(580, 290, 'column address: (day, variable)', 20, C.gray, 'middle');
-  b += text(460, 337, '2 × 3 × 2 entries  →  2 × 6 entries     ·     twelve values in both views', 21, C.ink, 'middle');
-  svg('02-unfolding-pages', 920, 370, 'Unfolding the location tables', 'A three-way tensor is unfolded into a two-by-six matrix with one row per location and explicitly ordered day-variable column pairs. The value eleven moves to row two, column five.', b);
-}
-
-// Outer products: all crossings are retained; no crossings are added together.
-{
-  let b = text(30, 35, 'A woven table of all pairwise products', 26, C.ink, 'start', 'bold');
-  for (let j = 0; j < 3; j++) {
-    const x = 330 + j * 175;
-    b += line(x, 95, x, 305, C.teal, 12);
-    b += text(x, 80, 'v' + (j + 1) + ' = ' + outerV[j], 21, C.teal, 'middle');
-  }
-  for (let i = 0; i < 2; i++) {
-    const y = 155 + i * 115;
-    b += line(215, y, 805, y, C.blue, 12);
-    b += text(170, y + 6, 'u' + (i + 1) + ' = ' + outerU[i], 21, C.blue, 'end');
-    for (let j = 0; j < 3; j++)
-      b += circle(330 + j * 175, y, 32, C.white, C.orange, 3)
-        + text(330 + j * 175, y + 8, outer[i][j], 26, C.orange, 'middle', 'bold');
-  }
-  b += text(460, 360, 'Each crossing keeps its own address: Mᵢⱼ = uᵢ vⱼ', 22, C.ink, 'middle');
-  svg('03-outer-product-loom', 920, 400, 'The outer product as a loom', 'Two blue row threads and three teal column threads form six crossings, containing three, four, five, six, eight, and ten. No summation occurs.', b);
-}
-
-// Contraction: matching the index means multiply within lanes, then sum.
-{
-  let b = text(30, 35, 'Match each lane, then add its signed contribution', 26, C.ink, 'start', 'bold');
-  b += text(170, 83, 'aₖ', 22, C.blue, 'middle') + text(320, 83, 'bₖ', 22, C.teal, 'middle');
-  const ys = [130, 215, 300];
-  ys.forEach((y, k) => {
-    b += text(35, y + 7, 'k = ' + (k + 1), 19, C.gray);
-    b += circle(170, y, 27, C.blue) + text(170, y + 8, dotA[k], 24, C.white, 'middle');
-    b += text(244, y + 7, '×', 30, C.gray, 'middle');
-    b += circle(320, y, 27, C.teal) + text(320, y + 8, dotB[k], 24, C.white, 'middle');
-    b += line(360, y, 450, y, C.gray, 2, false, true);
-    b += circle(500, y, 31, k === 1 ? C.orange : C.blue);
-    b += text(500, y + 8, contributions[k] > 0 ? '+' + contributions[k] : contributions[k], 24, C.white, 'middle');
-    b += curve('M535,' + y + ' C610,' + y + ' 645,215 685,215', k === 1 ? C.orange : C.blue, 3);
+  let b=text(656,30,'One matrix',24,C.ink,'middle','bold');
+  ledger.forEach((page,s)=>{
+    const x=45+s*150, color=s===0?C.blue:C.teal;
+    const locationFill=s===0?'#E8F0F8':'#E5F4F1';
+    b+=text(x+45,30,'Location '+(s+1),22,color,'middle','bold');
+    page.forEach((row,t)=>{
+      row.forEach((value,v)=>{
+        const selected=s===1&&t===2&&v===0;
+        const fill=selected?'#FBE2D4':locationFill;
+        const ink=selected?C.orange:color;
+        b+=rect(x+v*45,54+t*32,45,32,fill,C.white,2);
+        b+=text(x+22.5+v*45,77+t*32,value,21,ink,'middle',selected?'bold':'normal');
+        const col=2*t+v, destY=62+s*44;
+        b+=rect(440+col*72,destY,72,44,fill,C.white,2);
+        b+=text(476+col*72,destY+30,value,23,ink,'middle',selected?'bold':'normal');
+      });
+    });
   });
-  b += curve('M681,187 Q704,180 725,187 L731,270 Q704,295 675,270 Z', C.ink, 3, C.pale);
-  b += text(704, 233, '8', 32, C.ink, 'middle', 'bold');
-  b += text(790, 213, '4 − 2 + 6', 21, C.ink) + text(790, 245, '= 8', 25, C.ink);
-  b += text(460, 370, 'The index k is used internally; the result has no k-axis.', 21, C.ink, 'middle');
-  svg('04-contraction-lanes', 960, 410, 'Contraction as matching lanes', 'Three lanes show products four, minus two, and six. They merge to the scalar eight. The orange lane is a negative algebraic contribution, not a negative amount of physical material.', b);
+  b+=line(325,103,405,103,C.gray,3,false,true);
+  svg('02-unfolding-pages',920,170,'Each location table becomes one matrix row','Two small three-by-two location tables stand side by side on the left. One arrow leads to a two-by-six matrix on the right. Blue location one becomes the first row, containing one through six. Teal location two becomes the second row, containing seven through twelve. Eleven stays highlighted orange in both views. All twelve values are preserved.',b);
+}
+
+// One shared row replaces separately learned copies of the same pattern.
+{
+  // Small outline of a physical weight; every icon marks a learned parameter.
+  const weightIcon=(x,y,color)=>
+    circle(x+8,y+4,3,'none',color,1.3)
+    +curve('M'+(x+3)+','+(y+7)+' L'+(x+13)+','+(y+7)+' L'+(x+16)+','+(y+18)+' L'+x+','+(y+18)+' Z',color,1.2,color);
+  let b=text(225,30,'12 separate weights',26,C.blue,'middle','bold');
+  b+=text(715,30,'7 factor weights',26,C.teal,'middle','bold');
+  b+=text(540,65,'u',20,C.teal,'middle');
+  b+=text(752.5,65,'v',20,C.teal,'middle');
+  outer.forEach((row,i)=>{
+    row.forEach((value,j)=>{
+      const x=45+j*90,y=80+i*60, selected=i===1&&j===2;
+      const color=selected?C.orange:C.blue;
+      b+=rect(x,y,85,50,selected?'#FBE2D4':C.pale,color,selected?2.5:1.5);
+      b+=weightIcon(x+65,y+7,color);
+      b+=text(x+34,y+34,fmt(value),24,color,'middle','bold');
+    });
+  });
+  outerU.forEach((value,i)=>{
+    const y=80+i*60, selected=i===1, color=selected?C.orange:C.teal;
+    b+=rect(510,y,60,50,selected?'#FBE2D4':C.pale,color,selected?2.5:1.5);
+    b+=weightIcon(550,y+7,color);
+    b+=text(532,y+34,fmt(value),24,color,'middle','bold');
+  });
+  outerV.forEach((value,j)=>{
+    const x=625+j*65, selected=j===2, color=selected?C.orange:C.teal;
+    b+=rect(x,80,60,50,selected?'#FBE2D4':C.pale,color,selected?2.5:1.5);
+    b+=weightIcon(x+40,87,color);
+    b+=text(x+22,114,fmt(value),24,color,'middle','bold');
+  });
+  svg('03-outer-product-loom',920,270,'Twelve weight symbols versus seven, with one matching factor pair highlighted','Each box contains a numeric weight value and a small physical-weight symbol marking a learned parameter. Left: twelve separate weights in a three-by-four table, with the weight twelve highlighted orange. Right: three multiplier weights u and four shared weights v, seven parameters total. The matching factors two and six are highlighted orange. Only counts and the labels u and v appear; there are no explanatory sentences or calculation steps.',b);
+}
+
+// The second matrix needs a second base row: one altered entry breaks proportionality.
+{
+  let b='';
+  [rankComparison.rankOne,rankComparison.rankTwo].forEach((values,panel)=>{
+    const x=90+panel*460, center=x+130;
+    b+=text(center,28,'Rank '+(panel+1),25,C.ink,'middle','bold');
+    values.forEach((row,i)=>row.forEach((value,j)=>{
+      const base=i===0, extra=panel===1&&i===1, changed=extra&&j===3;
+      const color=changed?'#B53E32':extra?'#B98D87':base?C.blue:C.gray;
+      const fill=changed?'#F8D4CE':extra?'#FBF3F1':base?'#DDEBF6':C.pale;
+      b+=rect(x+j*65,52+i*45,60,40,fill,color,changed?2.5:base?1.5:0.7);
+      b+=text(x+30+j*65,79+i*45,value,21,color,'middle',base||changed?'bold':'normal');
+    }));
+    b+=text(center,224,panel===0?'1 base row':'2 base rows',21,C.ink,'middle');
+  });
+  svg('03b-rank-comparison',920,245,'One base row or two: matrix ranks one and two','Two three-by-four matrices are compared. Left: all rows follow one blue base row, so the rank is one. Right: changing the second row last entry from 16 to 17 requires a second base row. Its unchanged values 4,8,12 are muted red; the changed 17 is strongly highlighted in red. The third row is still three times the first, so two base rows suffice and the rank is exactly two.',b);
+}
+
+// Reuse the known seven factors to calculate three outputs without building W.
+{
+  let b='';
+  [[80,'Inputs x'],[225,'Weights v'],[445,'Sum'],[665,'Factors u'],[820,'Outputs y']].forEach(([x,label])=>{
+    b+=text(x,30,label,23,C.ink,'middle','bold');
+  });
+  factorCalculation.input.forEach((value,j)=>{
+    const y=84+j*44;
+    b+=rect(50,y-18,60,36,C.pale,C.blue,1.5);
+    b+=text(80,y+8,value,23,C.blue,'middle');
+    b+=text(155,y+8,'×',26,C.gray,'middle');
+    b+=rect(195,y-18,60,36,'#E5F4F1',C.teal,1.5);
+    b+=text(225,y+8,outerV[j],23,C.teal,'middle');
+    b+=curve('M270,'+y+' C330,'+y+' 350,150 410,150',C.gray,2);
+  });
+  b+=circle(445,150,34,'#FBE2D4',C.orange,2);
+  b+=text(445,160,factorCalculation.sharedSum,29,C.orange,'middle','bold');
+  b+=text(375,140,'Σ',25,C.gray,'middle');
+  outerU.forEach((value,i)=>{
+    const y=90+i*60;
+    b+=curve('M480,150 C535,150 535,'+y+' 590,'+y,C.gray,2);
+    b+=text(615,y+8,'×',26,C.gray,'middle');
+    b+=rect(640,y-19,50,38,'#E5F4F1',C.teal,1.5);
+    b+=text(665,y+8,value,23,C.teal,'middle');
+    b+=line(705,y,770,y,C.gray,2,false,true);
+    b+=rect(785,y-19,70,38,C.pale,C.blue,1.5);
+    b+=text(820,y+8,factorCalculation.outputs[i],23,C.blue,'middle','bold');
+  });
+  svg('04-contraction-lanes',920,250,'Calculating directly with seven factors','Four inputs one, two, three, four are paired with the shared weights two, four, six, eight. Multiplying the pairs and adding produces the shared sum sixty. Multipliers one, two, three turn that sum into outputs sixty, one hundred twenty, one hundred eighty. No full weight matrix is built.',b);
 }
 
 // Exact SVD-built pattern: the numerical panels use known orthonormal modes.
@@ -216,26 +264,18 @@ function heatColor(value) {
   return 'rgb(' + base.map(c => Math.round(255 * (1 - strength) + c * strength)).join(',') + ')';
 }
 {
-  let b = text(30, 35, 'Reconstruct a pattern by retaining more separable layers', 25, C.ink, 'start', 'bold');
-  const ranks = [3, 1, 2, 3], titles = ['Original pattern', 'One layer', 'Two layers', 'All three layers'];
-  const errors = ['reference', 'error = √10', 'error = 1', 'error = 0'];
+  let b = '';
+  const ranks = [3, 1, 2, 3], titles = ['Original', '1 pattern', '2 patterns', '3 patterns'];
   for (let p = 0; p < 4; p++) {
-    const x = 35 + 230 * p, y = 105, m = patternMatrix(ranks[p]);
-    b += text(x + 92, 82, titles[p], 20, C.ink, 'middle', 'bold');
+    const x = 25 + 230 * p, y = 50, m = patternMatrix(ranks[p]);
+    b += text(x + 72, 28, titles[p], 23, C.ink, 'middle', 'bold');
     for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++)
-      b += rect(x + j * 23, y + i * 23, 23, 23, heatColor(m[i][j]), C.white, 0.7);
-    b += text(x + 92, 318, errors[p], 20, C.gray, 'middle');
+      b += rect(x + j * 18, y + i * 18, 18, 18, heatColor(m[i][j]), C.white, 0.7);
   }
-  b += text(35, 374, 'Layer strength', 21, C.ink);
-  [9, 3, 1].forEach((s, k) => {
-    b += line(250, 369 + 37 * k, 250 + s * 42, 369 + 37 * k, [C.blue, C.teal, C.orange][k], 16);
-    b += text(665, 376 + 37 * k, 'σ' + (k + 1) + ' = ' + s, 21, C.ink);
-  });
-  b += text(470, 512, 'The scale and colours are identical in all four panels.', 19, C.gray, 'middle');
-  svg('05-svd-pattern-layers', 960, 545, 'SVD as layers of a pattern', 'Four eight-by-eight heatmaps show an original rank-three matrix and its rank-one, rank-two and rank-three SVD reconstructions. The singular values are nine, three and one.', b);
+  svg('05-svd-pattern-layers', 920, 215, 'Reconstruction with one, two, or three SVD patterns', 'Four compact eight-by-eight heatmaps show an original rank-three matrix and the sums of its first one, two, or three SVD patterns. All panels use the same color scale. Three patterns reproduce the original exactly. The singular values are nine, three and one.', b);
 }
 
 const training = trainIllustration();
 buildNetworkFigures({svg, text, line, curve, circle, rect, node, matrix, C, contractionCosts, training, trainingData});
-fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify({figures: manifest, numericalData: {ledger, outer, contributions, contractionCosts, training}}, null, 2) + '\n');
+fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify({figures: manifest, numericalData: {ledger, outer, rankComparison, contributions, factorCalculation, contractionCosts, training}}, null, 2) + '\n');
 console.log('Built ' + manifest.length + ' original vector figures.');

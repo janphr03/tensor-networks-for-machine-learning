@@ -4,6 +4,8 @@ Wir untersuchen, ob Tensor-Netzwerk-basierte ML-Modelle oder Hybridmodelle die Z
 
 Der geplante Umfang der Studienarbeit beträgt **80–100 Seiten**.
 
+WIE KANN DAS MODELL AUF ANDERE DATEN GENERALISIERT WERDEN
+
 Dazu analysieren wir die Datensätze und recherchieren den aktuellen Forschungsstand für beide Modellklassen. Die Auswahl der Tensor-Netzwerk-Ansätze und der Vergleichsmodelle richtet sich nach dem State of the Art und ihrer Eignung für die konkreten Daten. Wir implementieren bzw. adaptieren die ausgewählten Verfahren und evaluieren sie unter vergleichbaren Bedingungen.
 
 **Primär bewertet wird die Vorhersagegenauigkeit auf ungesehenen Daten.** Parameterzahl, Trainings- und Inferenzzeit sowie Speicher- und Rechenbedarf sind ergänzende Kriterien. Modellkonfigurationen werden anhand einer zur Aufgabe passenden Validierungsmetrik ausgewählt; die Testdaten bleiben für die abschließende Auswertung reserviert. Ziel ist es, Nutzen, Grenzen und geeignete Einsatzbedingungen der Tensor-Modelle zu bestimmen und mögliche Weiterentwicklungen abzuleiten.

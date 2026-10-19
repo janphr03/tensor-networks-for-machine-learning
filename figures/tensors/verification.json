@@ -24,23 +24,54 @@
       "details": {
         "entries": [
           [
-            3,
+            2,
             4,
-            5
+            6,
+            8
+          ],
+          [
+            4,
+            8,
+            12,
+            16
           ],
           [
             6,
-            8,
-            10
+            12,
+            18,
+            24
           ]
         ],
-        "rank": 1
+        "rank": 1,
+        "comparisonRank": 2,
+        "storage": {
+          "dense": 12,
+          "factors": 7
+        },
+        "weightedExample": {
+          "input": 5,
+          "direct": 60,
+          "factored": 60
+        }
       }
     },
     {
-      "name": "Signed contraction and matrix contraction",
+      "name": "Direct factor calculation agrees with full matrix contraction",
       "status": "passed",
       "details": {
+        "input": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "sharedSum": 60,
+        "outputs": [
+          60,
+          120,
+          180
+        ],
+        "additionalInputChecks": 3,
         "signedSum": 8
       }
     },
@@ -149,7 +180,7 @@
       "name": "Generated figure manifest and training data agree with the verified examples",
       "status": "passed",
       "details": {
-        "originalVectorFigures": 12,
+        "originalVectorFigures": 13,
         "externalAssets": 0
       }
     }

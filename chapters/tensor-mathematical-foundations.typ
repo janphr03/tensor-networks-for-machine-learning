@@ -7,10 +7,10 @@ happens when a small set of numbers cannot reproduce all weights exactly.
 
 This section builds the necessary tools step by step. First, we learn how
 to find a value in data with several axes, such as series, time, and variable.
-Then we build larger arrays from smaller ones and rearrange them for
-calculation. Next, we combine entries to calculate a result. Finally, we
-ask how many simple patterns are needed to describe an array, and what
-is lost when we keep fewer of them. These tools will let us work with the
+Then we build larger arrays from smaller ones. A separate step shows how
+to rearrange their values for matrix methods. We then find simple patterns
+in a matrix and examine what is lost when we keep fewer of them. Finally,
+we calculate with the small factors directly. These tools will let us work with the
 small, connected tensors introduced in @tensor-network-foundations.
 
 #block(breakable: false)[
@@ -65,116 +65,100 @@ temperature leaves a *fiber*: the column $(7,9,11)$ with only day free
 ) <fig-slice-fiber>
 
 #block(breakable: false)[
-=== Tensor Products, Reshaping, and Matricization
+=== Tensor Products and Shared Weights <tensor-products>
 
-To store model weights compactly, we want to build a whole table from
-just two short lists. For example, multiplying the base row $(3,4,5)$
-by the multipliers $1$ and $2$ produces two rows of weights. The
-*outer product* describes this construction. We then look at how to
-rearrange an array into a matrix so that methods for matrices can work
-with it. This gives us two tools: building arrays from smaller pieces
-and arranging their entries for calculation.
+The rows in @fig-outer repeat one pattern at different strengths.
+We can learn the four base values $(2,4,6,8)$ once, together with three
+multipliers $(1,2,3)$. *That gives seven learned parameters instead of
+twelve separate weights.*
 ]
-
-@fig-outer visualises the outer product as a loom: one vector sets the values of the horizontal threads, the other
-those of the vertical threads, and every crossing holds the product of its two
-thread values. Every crossing remains separately addressable (@fig-outer). For
-$u in bb(R)^I$ and $v in bb(R)^J$,
-$ M = u v^T, quad M_(i j) = u_i v_j, quad "for example" quad
-  mat(1;2) mat(3,4,5) = mat(3,4,5;6,8,10). $
 
 #figure(
   image("../figures/tensors/03-outer-product-loom.svg", width: 100%,
-    alt: "A loom retains six pairwise products at the crossings of two row threads and three column threads."),
+    alt: "Each box has a number and a small weight symbol. Left: twelve weights with 12 highlighted orange. Right: three weights in u and four in v, seven total, with the matching factors 2 and 6 highlighted orange. Only counts and group labels are shown, with no explanatory sentences or calculations."),
   caption: [
-    The outer product as a loom. Each crossing is one entry of the resulting
-    matrix; nothing is added up.
+    Each weight symbol marks one learned parameter. Orange highlights one
+    weight and the two factors that produce it. Values are illustrative.
   ],
 ) <fig-outer>
 
-The general tensor product works in the same way: the orders add up, and no
-index is summed #cite(<lee2016>).
+This construction is the *outer product*. If $u$ contains the multipliers
+and $v$ the shared row, the weight matrix $W$ has entries $w_(i j)$:
+$ W = u v^T, quad w_(i j) = u_i v_j. $
+For $I$ rows and $J$ columns, the full table stores $I J$ numbers, while
+the two factors store $I+J$. We keep the factors and calculate weights
+from them when needed.
+
+Fewer trainable parameters do not automatically mean faster predictions.
+Runtime also depends on how we calculate with the factors.
+
+The same idea builds arrays with more indices by multiplying entries
+from more factors. This is a *tensor product*: the orders add up, and
+no index is summed #cite(<lee2016>).
 
 The *rank* of a matrix is the smallest number of base rows needed to build
 all its rows by multiplying these base rows by numbers and adding the
-results. In the example above, $(6,8,10) = 2(3,4,5)$. One base row is
-enough, so the matrix has *rank one*. If one base row is not enough but
-two are, the rank is two. @mathematical-foundations explains how this
-helps us compress matrices.
+results. In @fig-rank-comparison, one blue base row reproduces all rows
+on the left: *rank one*. On the right, the red row needs a second
+base row: *rank two*.
 
-Some methods for compressing arrays work on matrices.
-To apply them to a tensor with more axes, we first arrange its entries
-in rows and columns. Changing an array's shape is called *reshaping*;
-turning a tensor into a matrix is called *matricization*, or *unfolding*.
-The values are preserved, and their new positions must be specified.
-Returning to the two locations, place all values from one location into one row
-(@fig-unfolding). The
-$2 times 3 times 2$ tensor becomes a $2 times 6$ matrix with the column index
-$c = 2(t-1)+v$. Many algorithms work on such unfoldings; the chosen grouping must
-be recorded, because a later factorization uses it to impose structure.
+#figure(
+  image("../figures/tensors/03b-rank-comparison.svg", width: 100%,
+    alt: "Left: a rank-one matrix with one blue base row. Right: the unchanged second-row values 4,8,12 are muted red, while 17 is strongly highlighted. This change from 16 to 17 makes the second row independent of the first, giving rank two. The third row is still a multiple of the first."),
+  caption: [One base row suffices on the left. Changing 16 to the red 17
+    on the right makes a second base row necessary.],
+) <fig-rank-comparison>
+
+@mathematical-foundations explains how rank helps us compress matrices.
+When rows do not follow one shared pattern,
+one outer product cannot reproduce them exactly. We then need more
+patterns or must accept an approximation.
+
+#block(breakable: false)[
+=== Reshaping and Matricization <tensor-reshaping>
+
+Our measurements are stored in two separate location tables. To apply
+matrix methods to both locations together, we arrange their readings in
+one matrix, with one row per location. This changes only the arrangement;
+any compression comes later.
+]
+
+@fig-unfolding shows how: read each location's
+table row by row, then place its six values in one long row. The two
+rows form a $2 times 6$ matrix. This is *matricization*, or *unfolding*;
+*reshaping* means changing an array's shape more generally.
 
 #figure(
   image("../figures/tensors/02-unfolding-pages.svg", width: 100%,
-    alt: "Two ledger pages become a two-by-six matrix with explicit time-variable column addresses."),
+    alt: "Two small location tables stand side by side on the left. One arrow leads to a single matrix. The blue table becomes the blue first row, containing 1,2,3,4,5,6. The teal table becomes the teal second row, containing 7,8,9,10,11,12. Eleven stays orange in both views."),
   caption: [
-    Unfolding the two location tables. The value eleven moves to row two, column five, because
-    $c=2(3-1)+1=5$. The conversion is reversible.
+    Each location table becomes one matrix row; all twelve values stay the same.
   ],
 ) <fig-unfolding>
 
-#block(breakable: false)[
-=== Tensor Contraction and Diagrammatic Notation
-
-Once weights are stored in smaller pieces, we need to calculate with
-those pieces. A familiar example is a weighted prediction: multiply each
-input by its weight and add the contributions. *Contraction* uses the
-same multiply-and-add idea for arrays with several indices. Diagrammatic
-notation helps us keep track of which entries belong together.
-]
-
-A contraction multiplies entries that share an index and adds the products. For
-two vectors this is the dot product,
-$ (1,2,3) dot (4,-1,2) = 4 - 2 + 6 = 8. $
-The index $k$ identifies matching pairs before it is summed out (@fig-contraction).
-Matrix multiplication is a contraction over the shared middle index,
-$C_(i j) = sum_k A_(i k) B_(k j)$. In general, contracting one index pair of an
-order-$p$ and an order-$q$ tensor leaves $p + q - 2$ indices.
-
-#figure(
-  image("../figures/tensors/04-contraction-lanes.svg", width: 100%,
-    alt: "Three matching lanes contribute four, minus two, and six to a scalar total of eight."),
-  caption: [
-    Contraction as matching lanes: matching entries are multiplied and the
-    signed contributions are added. The orange lane subtracts two.
-  ],
-) <fig-contraction>
-
-Tensor networks describe this bookkeeping with pictures. A node is a tensor and
-each leg an index. Joining two legs means summing over their shared index; open
-legs remain in the result #cite(<bridgeman2017>, supplement: [Secs. 1.1–1.3]). The pictures in the
-next section use this notation.
+#pagebreak(weak: true)
 
 #block(breakable: false)[
 === Rank, Singular Value Decomposition, and Approximation <mathematical-foundations>
 
-A table whose rows are all multiples of one base row follows one simple
-pattern, so two short lists reproduce it exactly. Real weights may need several
-patterns. Keeping more patterns can reproduce the weights more closely,
-but also requires more stored numbers. We therefore need a way to count
-these patterns and choose which ones to keep. *Rank* and the *singular
-value decomposition* provide this starting point for matrices.
+In @fig-outer, every row was a multiple of $(2,4,6,8)$. We spotted this
+by looking at the numbers and could store seven numbers instead of twelve.
+The *singular value decomposition* (SVD) finds such patterns for us when
+they are harder to see.
 ]
 
-An outer product $u v^T$ forms one simple pattern. A matrix of rank $r$
-can be built by adding $r$ such patterns, and fewer will not reproduce it
-exactly. This leads to a second
-visual metaphor: reconstructing an image by adding separable layers
-(@fig-svd). The singular value decomposition (SVD) writes every matrix as such a
-sum, sorted by strength:
-$ M = sum_(ell=1)^q sigma_ell u_ell v_ell^T,
-  quad sigma_1 >= sigma_2 >= dots >= sigma_q >= 0. $
-Keeping only the first $r$ layers gives the best approximation of rank $r$, and
-its squared error is the sum of the dropped $sigma_ell^2$ #cite(<eckart1936>).
+The first pattern can be understood using our earlier example: find
+one base row and one multiplier per row so that the resulting table
+comes as close as possible to the given matrix. Closeness is measured
+by squaring the difference at each entry and adding the squared differences.
+Subtracting this first pattern leaves a remainder. The next pattern
+describes that remainder as closely as possible, and so on. The SVD
+calculates these patterns from the matrix entries; we do not choose
+them by hand.
+
+@fig-svd shows how adding more patterns reconstructs a matrix. Keeping
+only a few can save space, but may change some values: we obtain an
+*approximation*.
 
 #figure(
   image("../figures/tensors/05-svd-pattern-layers.svg", width: 100%,
@@ -186,9 +170,60 @@ its squared error is the sum of the dropped $sigma_ell^2$ #cite(<eckart1936>).
   ],
 ) <fig-svd>
 
+Each layer is an outer product $u_ell v_ell^T$ multiplied by its strength,
+called a *singular value* $sigma_ell$. The SVD orders these layers from
+strongest to weakest:
+$ M = sum_(ell=1)^q sigma_ell u_ell v_ell^T,
+  quad sigma_1 >= sigma_2 >= dots >= sigma_q >= 0. $
+Here, $q$ is the smaller of the row and column counts; some strengths may
+be zero. The number of nonzero strengths is the matrix's rank.
+
+Keeping only the first $r$ layers gives the best approximation of rank
+at most $r$ when error is measured by the sum of squared entry differences.
+This squared error equals the sum of the dropped $sigma_ell^2$
+#cite(<eckart1936>).
+
 Storing the full $8 times 8$ matrix takes 64 numbers, whereas $r$ layers take
-$r(8+8+1)$. Compression therefore pays off only when the rank is small compared
-with the size of the matrix. A good approximation of given numbers is also not
-yet a good forecast; that question is answered only on held-out data. A tensor
-has several unfoldings and therefore several ranks. The next section shows how
-networks of small tensors exploit them.
+$r(8+8+1)$: two vectors of length eight and one strength per layer.
+Compression therefore pays off only when we keep few enough layers.
+Approximating weights closely does not guarantee accurate forecasts;
+forecast accuracy must be checked on held-out data.
+
+#pagebreak(weak: true)
+
+#block(breakable: false)[
+=== Tensor Contraction: Calculating with Factors <tensor-contraction>
+
+We can now represent a weight matrix using smaller factors. To make a
+prediction, we can calculate with these factors directly, without first
+rebuilding the full matrix. *Tensor contraction* describes how the required
+multiplications and sums are carried out.
+]
+
+Return to the seven factors in @fig-outer: the base weights
+$v=(2,4,6,8)^T$ and the multipliers $u=(1,2,3)^T$. Suppose we use this
+weight matrix to turn four inputs into three outputs. Each output is
+a weighted sum of the inputs. Since every weight row is a multiple of
+$v$, we can calculate the sum with $v$ once, then multiply that result
+by each entry of $u$.
+
+For the illustrative input $x=(1,2,3,4)^T$, the shared sum is
+$2 times 1 + 4 times 2 + 6 times 3 + 8 times 4 = 60$.
+The three multipliers give $y=(60,120,180)^T$ (@fig-contraction).
+These are exactly the outputs we would get using all twelve weights.
+
+#figure(
+  image("../figures/tensors/04-contraction-lanes.svg", width: 100%,
+    alt: "Four inputs 1,2,3,4 are paired with the shared weights 2,4,6,8. Their products are summed to 60. That sum is multiplied by the three factors 1,2,3 to give outputs 60,120,180. The full three-by-four weight matrix is never built."),
+  caption: [One shared weighted sum produces all three outputs through the multipliers $u$.],
+) <fig-contraction>
+
+In symbols, this is
+$ y = W x = u (v^T x), quad
+  y_i = u_i sum_(j=1)^4 v_j x_j. $
+The sum pairs each input $x_j$ with its weight $v_j$, multiplies them,
+and adds the products. This is a *contraction over $j$*: the input index
+$j$ is summed out, while $i$ still selects one of the three outputs.
+Contractions use the same rule for tensors with more indices
+#cite(<lee2016>). The next section shows how this lets us calculate with
+several connected factors.
